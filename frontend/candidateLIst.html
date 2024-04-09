@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+
     <title>Candidate List</title>
     <style>
         body {
@@ -120,95 +122,177 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>Candidate List Admin</h1>
-        <div class="button-container">
-            <!-- <button id="addCandidateButton">Add Candidate</button> -->
-            <a href="#" id="refreshButton" style="display: none;">Refresh List</a>
+    <!-- Admin Navbar -->
+    <nav class="admin-navbar navbar">
+        <!-- Your admin navbar content here -->
+        <div class="logo">
+            <img src="admin-logo.png" alt="Admin Logo">
         </div>
-        <table id="candidateTable">
-            <thead>
-                <tr>
-                    <th>Recruiter Name</th>
-                    <th>Qualification</th>
-                    <th>Candidate Name</th>
-                    <th>Phone Number</th>
-                    <th>Experience</th>
-                    <th>Computer Skills</th>
-                    <th>English Skills</th>
-                    <th>Other Skills</th>
-                    <th>Remark</th>
-                    <th>Category</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Table rows will be dynamically populated here -->
-            </tbody>
-        </table>
-    </div>
+        <div class="nav-links">
+            <a href="addUser.html" class="nav-link">Add User</a>
+            <a href="userList.html" class="nav-link">User List</a>
+            <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <button class="logout-btn">Logout</button>
+        </div>
+    </nav>
 
-    <!-- Modal overlay -->
-    <div class="modal-overlay" id="modalOverlay"></div>
+    <nav class="hr-navbar navbar">
+        <!-- Your admin navbar content here -->
+        <div class="logo">
+            <img src="admin-logo.png" alt="Admin Logo">
+        </div>
+        <div class="nav-links">
+            <a href="addCandidate.html" class="nav-link">Add Candidate</a>
+            <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <button class="logout-btn">Logout</button>
+        </div>
+    </nav>
 
-    <!-- Edit Modal -->
-    <div class="modal" id="editModal">
-        <h2>Edit Candidate</h2>
-        <form id="editForm">
-            <label for="qualification">Qualification:</label>
-            <input type="text" id="qualification" name="qualification" required><br>
+    <!-- Regular Navbar -->
+    <nav class="regular-navbar navbar">
+        <!-- Your regular navbar content here -->
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <div class="nav-links">
+            <a href="login.html" class="nav-link">Login</a>
+            <a href="register.html" class="nav-link">Register</a>
+        </div>
+    </nav>
 
-            <label for="candidateName">Candidate Name:</label>
-            <input type="text" id="candidateName" name="candidateName" required><br>
+    <script src="script.js"></script>
+    <script>
+        const token = localStorage.getItem('token');
+        const adminNavbar = document.querySelector('.admin-navbar');
+        const regularNavbar = document.querySelector('.regular-navbar');
+        const hrNavbar = document.querySelector('.hr-navbar');
 
-            <label for="phoneNumber">Phone Number:</label>
-            <input type="text" id="phoneNumber" name="phoneNumber" required><br>
+        if (token) {
+            fetchUserData(); // Call the function to fetch user data
+        } else {
+            // Show regular navbar if no token found
+            regularNavbar.style.display = 'flex';
+        }
 
-            <label for="experience">Experience:</label>
-            <input type="text" id="experience" name="experience" required><br>
+        async function fetchUserData() {
+            const requestOptions = {
+                method: 'GET',
+                headers: {
+                    'Accept': '*/*',
+                    'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,
+                    'Sec-Fetch-Mode': 'cors',
+                    'Sec-Fetch-Site': 'cross-site'
+                }
+            };
 
-            <label for="computerSkills">Computer Skills:</label>
-            <select id="computerSkills" name="computerSkills">
-                <option value="Introduction level">Introduction level</option>
-                <option value="Basic level">Basic level</option>
-                <option value="Intermediate level">Intermediate level</option>
-                <option value="Can work easily">Can work easily</option>
-            </select><br>
+            try {
+                const response = await fetch('http://localhost:4004/auth/me', requestOptions);
+                const data = await response.json();
 
-            <label for="englishSkills">English Skills:</label>
-            <select id="englishSkills" name="englishSkills">
-                <option value="Introduction level">Introduction level</option>
-                <option value="Basic level">Basic level</option>
-                <option value="Intermediate level">Intermediate level</option>
-                <option value="Can work easily">Can work easily</option>
-            </select><br>
+                if (data.role === 'admin') {
+                    adminNavbar.style.display = 'flex'; // Show admin navbar
+                } else if (data.role === 'recruiter') {
+                    hrNavbar.style.display = 'flex'; // Show regular navbar
+                } else {
+                    regularNavbar.style.display = 'flex'; // Show regular navbar
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        }
+    </script>
+    <div class="bodyTag">
+        <div class="container">
+            <h1>Candidate List Admin</h1>
+            <div class="button-container">
+                <!-- <button id="addCandidateButton">Add Candidate</button> -->
+                <a href="#" id="refreshButton" style="display: none;">Refresh List</a>
+            </div>
+            <table id="candidateTable">
+                <thead>
+                    <tr>
+                        <th>Recruiter Name</th>
+                        <th>Qualification</th>
+                        <th>Candidate Name</th>
+                        <th>Phone Number</th>
+                        <th>Experience</th>
+                        <th>Computer Skills</th>
+                        <th>English Skills</th>
+                        <th>Other Skills</th>
+                        <th>Remark</th>
+                        <th>Category</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows will be dynamically populated here -->
+                </tbody>
+            </table>
+        </div>
 
-            <label for="otherSkills">Other Skills:</label>
-            <input type="text" id="otherSkills" name="otherSkills" required><br>
+        <!-- Modal overlay -->
+        <div class="modal-overlay" id="modalOverlay"></div>
 
-            <label for="remark">Remark:</label>
-            <select id="remark" name="remark">
-                <option value="Selected">Selected</option>
-                <option value="Rejected">Rejected</option>
-                <option value="Under Process">Under Process</option>
-            </select><br>
+        <!-- Edit Modal -->
+        <div class="modal" id="editModal">
+            <h2>Edit Candidate</h2>
+            <form id="editForm">
+                <label for="qualification">Qualification:</label>
+                <input type="text" id="qualification" name="qualification" required><br>
 
-            <label for="category">Category:</label>
-            <select id="category" name="category">
-                <option value="Software Development">Software Development</option>
-                <option value="Sales">Sales</option>
-                <option value="Calling International">Calling International</option>
-                <option value="Calling Domestic">Calling Domestic</option>
-                <option value="Housekeeping">Housekeeping</option>
-                <option value="Day Clerical">Day Clerical</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Internet Marketing">Internet Marketing</option>
-                <option value="Graphic Design">Graphic Design</option>
-                <option value="Other">Other</option>
-            </select><br>
+                <label for="candidateName">Candidate Name:</label>
+                <input type="text" id="candidateName" name="candidateName" required><br>
 
-            <button type="submit">Save Changes</button>
-        </form>
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" required><br>
+
+                <label for="experience">Experience:</label>
+                <input type="text" id="experience" name="experience" required><br>
+
+                <label for="computerSkills">Computer Skills:</label>
+                <select id="computerSkills" name="computerSkills">
+                    <option value="Introduction level">Introduction level</option>
+                    <option value="Basic level">Basic level</option>
+                    <option value="Intermediate level">Intermediate level</option>
+                    <option value="Can work easily">Can work easily</option>
+                </select><br>
+
+                <label for="englishSkills">English Skills:</label>
+                <select id="englishSkills" name="englishSkills">
+                    <option value="Introduction level">Introduction level</option>
+                    <option value="Basic level">Basic level</option>
+                    <option value="Intermediate level">Intermediate level</option>
+                    <option value="Can work easily">Can work easily</option>
+                </select><br>
+
+                <label for="otherSkills">Other Skills:</label>
+                <input type="text" id="otherSkills" name="otherSkills" required><br>
+
+                <label for="remark">Remark:</label>
+                <select id="remark" name="remark">
+                    <option value="Selected">Selected</option>
+                    <option value="Rejected">Rejected</option>
+                    <option value="Under Process">Under Process</option>
+                </select><br>
+
+                <label for="category">Category:</label>
+                <select id="category" name="category">
+                    <option value="Software Development">Software Development</option>
+                    <option value="Sales">Sales</option>
+                    <option value="Calling International">Calling International</option>
+                    <option value="Calling Domestic">Calling Domestic</option>
+                    <option value="Housekeeping">Housekeeping</option>
+                    <option value="Day Clerical">Day Clerical</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Internet Marketing">Internet Marketing</option>
+                    <option value="Graphic Design">Graphic Design</option>
+                    <option value="Other">Other</option>
+                </select><br>
+
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+
     </div>
 
     <!-- JavaScript for fetching and manipulating data -->

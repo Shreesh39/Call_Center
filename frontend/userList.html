@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+
     <title>User List</title>
     <style>
-        body {
+        .bodyTag {
             background-color: #f0f4f7;
             font-family: Arial, sans-serif;
             color: #333;
@@ -125,73 +127,155 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>User List</h1>
-        <div class="select-container">
-            <label for="roleSelect">Select Role:</label>
-            <select id="roleSelect" onchange="fetchData()">
-                <option value="all">All</option>
-                <option value="admin">Admin</option>
-                <option value="recruiter">Recruiter</option>
-                <option value="manager">Manager</option>
-            </select>
+    <!-- Admin Navbar -->
+    <nav class="admin-navbar navbar">
+        <!-- Your admin navbar content here -->
+        <div class="logo">
+            <img src="admin-logo.png" alt="Admin Logo">
         </div>
-        <table id="userTable">
-            <thead>
-                <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Address</th>
-                    <th>Phone Number</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>ID</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="userData">
-                <!-- Table rows will be dynamically populated here -->
-            </tbody>
-        </table>
+        <div class="nav-links">
+            <a href="addUser.html" class="nav-link">Add User</a>
+            <a href="userList.html" class="nav-link">User List</a>
+            <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <button class="logout-btn">Logout</button>
+        </div>
+    </nav>
+
+    <nav class="hr-navbar navbar">
+        <!-- Your admin navbar content here -->
+        <div class="logo">
+            <img src="admin-logo.png" alt="Admin Logo">
+        </div>
+        <div class="nav-links">
+            <a href="addCandidate.html" class="nav-link">Add Candidate</a>
+            <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <button class="logout-btn">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Regular Navbar -->
+    <nav class="regular-navbar navbar">
+        <!-- Your regular navbar content here -->
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <div class="nav-links">
+            <a href="login.html" class="nav-link">Login</a>
+            <a href="register.html" class="nav-link">Register</a>
+        </div>
+    </nav>
+
+    <script src="script.js"></script>
+    <script>
+        const token = localStorage.getItem('token');
+        const adminNavbar = document.querySelector('.admin-navbar');
+        const regularNavbar = document.querySelector('.regular-navbar');
+        const hrNavbar = document.querySelector('.hr-navbar');
+
+        if (token) {
+            fetchUserData(); // Call the function to fetch user data
+        } else {
+            // Show regular navbar if no token found
+            regularNavbar.style.display = 'flex';
+        }
+
+        async function fetchUserData() {
+            const requestOptions = {
+                method: 'GET',
+                headers: {
+                    'Accept': '*/*',
+                    'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,
+                    'Sec-Fetch-Mode': 'cors',
+                    'Sec-Fetch-Site': 'cross-site'
+                }
+            };
+
+            try {
+                const response = await fetch('http://localhost:4004/auth/me', requestOptions);
+                const data = await response.json();
+                console.log(data, "datadatadatadatadatadatadata");
+                if (data.role === 'admin') {
+                    adminNavbar.style.display = 'flex'; // Show admin navbar
+                } else if (data.role === 'recruiter') {
+                    hrNavbar.style.display = 'flex'; // Show regular navbar
+                } else {
+                    regularNavbar.style.display = 'flex'; // Show regular navbar
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        }
+    </script>
+    <div class="bodyTag">
+        <div class="bodyTag">
+            <div class="container">
+                <h1>User List</h1>
+                <div class="select-container">
+                    <label for="roleSelect">Select Role:</label>
+                    <select id="roleSelect" onchange="fetchData()">
+                        <option value="all">All</option>
+                        <option value="admin">Admin</option>
+                        <option value="recruiter">Recruiter</option>
+                        <option value="manager">Manager</option>
+                    </select>
+                </div>
+                <table id="userTable">
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Address</th>
+                            <th>Phone Number</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>ID</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userData">
+                        <!-- Table rows will be dynamically populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal overlay -->
+            <div class="modal-overlay" id="modalOverlay"></div>
+
+            <!-- Edit Modal -->
+            <div class="modal" id="editModal">
+                <h2>Edit User</h2>
+                <form id="editForm">
+
+                    <input type="hidden" id="userId" name="userId">
+
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="firstName" name="firstName" required><br>
+
+
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" id="lastName" name="lastName" required><br>
+
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" name="address" required><br>
+
+                    <label for="phoneNumber">Phone Number:</label>
+                    <input type="text" id="phoneNumber" name="phoneNumber" required><br>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required><br>
+
+                    <label for="role">Role:</label>
+                    <select id="role" name="role">
+                        <option value="admin">Admin</option>
+                        <option value="recruiter">Recruiter</option>
+                        <option value="manager">Manager</option>
+                    </select><br>
+
+                    <button type="submit">Save Changes</button>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <!-- Modal overlay -->
-    <div class="modal-overlay" id="modalOverlay"></div>
-
-    <!-- Edit Modal -->
-    <div class="modal" id="editModal">
-        <h2>Edit User</h2>
-        <form id="editForm">
-
-            <input type="hidden" id="userId" name="userId">
-
-            <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" name="firstName" required><br>
-
-
-            <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" name="lastName" required><br>
-
-            <label for="address">Address:</label>
-            <input type="text" id="address" name="address" required><br>
-
-            <label for="phoneNumber">Phone Number:</label>
-            <input type="text" id="phoneNumber" name="phoneNumber" required><br>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required><br>
-
-            <label for="role">Role:</label>
-            <select id="role" name="role">
-                <option value="admin">Admin</option>
-                <option value="recruiter">Recruiter</option>
-                <option value="manager">Manager</option>
-            </select><br>
-
-            <button type="submit">Save Changes</button>
-        </form>
-    </div>
-
     <script>
         async function fetchData() {
             const roleSelect = document.getElementById('roleSelect');
@@ -281,7 +365,7 @@
         async function confirmDelete(userId) {
             if (confirm('Are you sure you want to delete this user?')) {
                 try {
-                    const response = await fetch(`http://localhost:4004/auth/user/${userId}`, {
+                    const response = await fetch(`http://localhost:4004/user/delete-profile/${userId}`, {
                         method: 'DELETE',
                     });
                     const responseData = await response.json();
@@ -333,6 +417,7 @@
                         method: 'PUT',
                         headers: {
                             'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,
+                            'Content-Type': 'application/json',
                         },
                         body: JSON.stringify(data),
                     });

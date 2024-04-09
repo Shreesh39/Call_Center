@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+
     <title>Add Candidate</title>
     <style>
         body {
@@ -61,91 +63,172 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>Add Candidate</h1>
-        <form id="candidateForm">
-            <!-- Qualification -->
+    <!-- Admin Navbar -->
+    <nav class="admin-navbar navbar">
+        <!-- Your admin navbar content here -->
+        <div class="logo">
+            <img src="admin-logo.png" alt="Admin Logo">
+        </div>
+        <div class="nav-links">
+            <a href="addUser.html" class="nav-link">Add User</a>
+            <a href="userList.html" class="nav-link">User List</a>
+            <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <button class="logout-btn">Logout</button>
+        </div>
+    </nav>
 
-            <label for="candidateName">Name:</label>
-            <input type="text" id="candidateName" name="candidateName" required><br>
+    <nav class="hr-navbar navbar">
+        <!-- Your admin navbar content here -->
+        <div class="logo">
+            <img src="admin-logo.png" alt="Admin Logo">
+        </div>
+        <div class="nav-links">
+            <a href="addCandidate.html" class="nav-link">Add Candidate</a>
+            <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <button class="logout-btn">Logout</button>
+        </div>
+    </nav>
 
-            <label for="phoneNumber">Phone Number:</label>
-            <input type="text" id="phoneNumber" name="phoneNumber" required><br>
+    <!-- Regular Navbar -->
+    <nav class="regular-navbar navbar">
+        <!-- Your regular navbar content here -->
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <div class="nav-links">
+            <a href="login.html" class="nav-link">Login</a>
+            <a href="register.html" class="nav-link">Register</a>
+        </div>
+    </nav>
 
-            <label for="qualification">Qualification:</label>
-            <input type="text" id="qualification" name="qualification" required><br>
+    <script src="script.js"></script>
+    <script>
+        const token = localStorage.getItem('token');
+        const adminNavbar = document.querySelector('.admin-navbar');
+        const regularNavbar = document.querySelector('.regular-navbar');
+        const hrNavbar = document.querySelector('.hr-navbar');
 
-            <!-- Experience -->
-            <label for="experience">Experience:</label>
-            <input type="text" id="experience" name="experience" required><br>
+        if (token) {
+            fetchUserData(); // Call the function to fetch user data
+        } else {
+            // Show regular navbar if no token found
+            regularNavbar.style.display = 'flex';
+        }
 
-            <!-- Computer Skills -->
-            <label for="computerSkills">Computer Skills:</label>
-            <select id="computerSkills" name="computerSkills">
-                <option value="Introduction level">Introduction level</option>
-                <option value="Basic level">Basic level</option>
-                <option value="Intermediate level">Intermediate level</option>
-                <option value="Can work easily">Can work easily</option>
-            </select><br>
+        async function fetchUserData() {
+            const requestOptions = {
+                method: 'GET',
+                headers: {
+                    'Accept': '*/*',
+                    'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,
+                    'Sec-Fetch-Mode': 'cors',
+                    'Sec-Fetch-Site': 'cross-site'
+                }
+            };
 
-            <!-- English Skills -->
-            <label for="englishSkills">English Skills:</label>
-            <select id="englishSkills" name="englishSkills">
-                <option value="Introduction level">Introduction level</option>
-                <option value="Basic level">Basic level</option>
-                <option value="Intermediate level">Intermediate level</option>
-                <option value="Can work easily">Can work easily</option>
-            </select><br>
+            try {
+                const response = await fetch('http://localhost:4004/auth/me', requestOptions);
+                const data = await response.json();
 
-            <!-- Other Skills -->
-            <label for="otherSkills">Other Skills:</label>
-            <input type="text" id="otherSkills" name="otherSkills" required><br>
+                if (data.role === 'admin') {
+                    adminNavbar.style.display = 'flex'; // Show admin navbar
+                } else if (data.role === 'recruiter') {
+                    hrNavbar.style.display = 'flex'; // Show regular navbar
+                } else {
+                    regularNavbar.style.display = 'flex'; // Show regular navbar
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        }
+    </script>
+    <div class="bodyTag">
+        <div class="container">
+            <h1>Add Candidate</h1>
+            <form id="candidateForm">
+                <!-- Qualification -->
 
-            <!-- Remark -->
-            <label for="remark">Remark:</label>
-            <select id="remark" name="remark">
-                <option value="Selected">Selected</option>
-                <option value="Rejected">Rejected</option>
-                <option value="Under Process">Under Process</option>
-            </select><br>
+                <label for="candidateName">Name:</label>
+                <input type="text" id="candidateName" name="candidateName" required><br>
 
-            <!-- Category -->
-            <label for="category">Category:</label>
-            <select id="category" name="category">
-                <option value="Software Development">Software Development</option>
-                <option value="Sales">Sales</option>
-                <option value="Calling International">Calling International</option>
-                <option value="Calling Domestic">Calling Domestic</option>
-                <option value="Housekeeping">Housekeeping</option>
-                <option value="Day Clerical">Day Clerical</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Internet Marketing">Internet Marketing</option>
-                <option value="Graphic Design">Graphic Design</option>
-                <option value="Other">Other</option>
-            </select><br>
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" required><br>
 
-            <!-- Detailed Remark -->
-            <label for="detailedRemark">Detailed Remark:</label>
-            <input type="text" id="detailedRemark" name="detailedRemark" required><br>
+                <label for="qualification">Qualification:</label>
+                <input type="text" id="qualification" name="qualification" required><br>
 
-            <!-- Next Callback -->
-            <label for="nextCallback">Next Callback:</label>
-            <input type="datetime-local" id="nextCallback" name="nextCallback"><br>
+                <!-- Experience -->
+                <label for="experience">Experience:</label>
+                <input type="text" id="experience" name="experience" required><br>
 
-            <!-- Task Assigned To (Dynamically populated dropdown) -->
-            <label for="taskAssignedTo">Task Assigned To:</label>
-            <select id="taskAssignedTo" name="taskAssignedTo"></select><br>
+                <!-- Computer Skills -->
+                <label for="computerSkills">Computer Skills:</label>
+                <select id="computerSkills" name="computerSkills">
+                    <option value="Introduction level">Introduction level</option>
+                    <option value="Basic level">Basic level</option>
+                    <option value="Intermediate level">Intermediate level</option>
+                    <option value="Can work easily">Can work easily</option>
+                </select><br>
 
-            <!-- Task Assigned At -->
-            <label for="taskAssignedAt">Task Assigned At:</label>
-            <input type="datetime-local" id="taskAssignedAt" name="taskAssignedAt"><br>
+                <!-- English Skills -->
+                <label for="englishSkills">English Skills:</label>
+                <select id="englishSkills" name="englishSkills">
+                    <option value="Introduction level">Introduction level</option>
+                    <option value="Basic level">Basic level</option>
+                    <option value="Intermediate level">Intermediate level</option>
+                    <option value="Can work easily">Can work easily</option>
+                </select><br>
 
-            <!-- Submit Button -->
-            <button type="submit">Submit</button>
-        </form>
+                <!-- Other Skills -->
+                <label for="otherSkills">Other Skills:</label>
+                <input type="text" id="otherSkills" name="otherSkills" required><br>
 
-        <!-- Snackbar for displaying API response -->
-        <div id="snackbar"></div>
+                <!-- Remark -->
+                <label for="remark">Remark:</label>
+                <select id="remark" name="remark">
+                    <option value="Selected">Selected</option>
+                    <option value="Rejected">Rejected</option>
+                    <option value="Under Process">Under Process</option>
+                </select><br>
+
+                <!-- Category -->
+                <label for="category">Category:</label>
+                <select id="category" name="category">
+                    <option value="Software Development">Software Development</option>
+                    <option value="Sales">Sales</option>
+                    <option value="Calling International">Calling International</option>
+                    <option value="Calling Domestic">Calling Domestic</option>
+                    <option value="Housekeeping">Housekeeping</option>
+                    <option value="Day Clerical">Day Clerical</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Internet Marketing">Internet Marketing</option>
+                    <option value="Graphic Design">Graphic Design</option>
+                    <option value="Other">Other</option>
+                </select><br>
+
+                <!-- Detailed Remark -->
+                <label for="detailedRemark">Detailed Remark:</label>
+                <input type="text" id="detailedRemark" name="detailedRemark" required><br>
+
+                <!-- Next Callback -->
+                <label for="nextCallback">Next Callback:</label>
+                <input type="datetime-local" id="nextCallback" name="nextCallback"><br>
+
+                <!-- Task Assigned To (Dynamically populated dropdown) -->
+                <label for="taskAssignedTo">Task Assigned To:</label>
+                <select id="taskAssignedTo" name="taskAssignedTo"></select><br>
+
+                <!-- Task Assigned At -->
+                <label for="taskAssignedAt">Task Assigned At:</label>
+                <input type="datetime-local" id="taskAssignedAt" name="taskAssignedAt"><br>
+
+                <!-- Submit Button -->
+                <button type="submit">Submit</button>
+            </form>
+
+            <!-- Snackbar for displaying API response -->
+            <div id="snackbar"></div>
+        </div>
     </div>
 
     <!-- JavaScript for fetching data and form submission -->

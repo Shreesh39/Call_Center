@@ -4,10 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+
     <title>Add User</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <style>
-        body {
+        .bodyTag {
             font-family: 'Roboto', sans-serif;
             background-color: #f0f4f7;
             margin: 0;
@@ -120,59 +122,141 @@
 </head>
 
 <body>
-    <div class="form-container">
-        <h2 style="color: #007bff;">Add New User</h2>
-        <form id="registerForm" novalidate autocomplete="off">
+    <!-- Admin Navbar -->
+    <nav class="admin-navbar navbar">
+        <!-- Your admin navbar content here -->
+        <div class="logo">
+            <img src="admin-logo.png" alt="Admin Logo">
+        </div>
+        <div class="nav-links">
+            <a href="addUser.html" class="nav-link">Add User</a>
+            <a href="userList.html" class="nav-link">User List</a>
+            <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <button class="logout-btn">Logout</button>
+        </div>
+    </nav>
 
-            <div class="form-group">
-                <label for="role">Select Role</label>
-                <select id="role" required>
-                    <option value="recruiter">Recruiter</option>
-                    <option value="manager">Manager</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="first_name">First Name</label>
-                <input id="first_name" type="text" required />
-                <p class="error-text" id="firstNameError"></p>
-            </div>
+    <nav class="hr-navbar navbar">
+        <!-- Your admin navbar content here -->
+        <div class="logo">
+            <img src="admin-logo.png" alt="Admin Logo">
+        </div>
+        <div class="nav-links">
+            <a href="addCandidate.html" class="nav-link">Add Candidate</a>
+            <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <button class="logout-btn">Logout</button>
+        </div>
+    </nav>
 
-            <div class="form-group">
-                <label for="last_name">Last Name</label>
-                <input id="last_name" type="text" required maxlength="20" minlength="1" />
-                <p class="error-text" id="lastNameError"></p>
-            </div>
+    <!-- Regular Navbar -->
+    <nav class="regular-navbar navbar">
+        <!-- Your regular navbar content here -->
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <div class="nav-links">
+            <a href="login.html" class="nav-link">Login</a>
+            <a href="register.html" class="nav-link">Register</a>
+        </div>
+    </nav>
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input id="email" type="email" required maxlength="60" pattern="\S+@\S+" />
-                <p class="error-text" id="emailError"></p>
-            </div>
+    <script src="script.js"></script>
+    <script>
+        const token = localStorage.getItem('token');
+        const adminNavbar = document.querySelector('.admin-navbar');
+        const regularNavbar = document.querySelector('.regular-navbar');
+        const hrNavbar = document.querySelector('.hr-navbar');
 
-            <div class="form-group">
-                <label for="phone_number">Phone Number</label>
-                <input id="phone_number" type="tel" required minlength="10" maxlength="10" />
-                <p class="error-text" id="phoneNumberError"></p>
-            </div>
+        if (token) {
+            fetchUserData(); // Call the function to fetch user data
+        } else {
+            // Show regular navbar if no token found
+            regularNavbar.style.display = 'flex';
+        }
 
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input id="password" type="password" required maxlength="99" />
-                <p class="error-text" id="passwordError"></p>
-            </div>
+        async function fetchUserData() {
+            const requestOptions = {
+                method: 'GET',
+                headers: {
+                    'Accept': '*/*',
+                    'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,
+                    'Sec-Fetch-Mode': 'cors',
+                    'Sec-Fetch-Site': 'cross-site'
+                }
+            };
 
-            <div class="form-group">
-                <label for="address">Address</label>
-                <input id="address" type="text" required maxlength="99" />
-                <p class="error-text" id="addressError"></p>
-            </div>
+            try {
+                const response = await fetch('http://localhost:4004/auth/me', requestOptions);
+                const data = await response.json();
+
+                if (data.role === 'admin') {
+                    adminNavbar.style.display = 'flex'; // Show admin navbar
+                } else if (data.role === 'recruiter') {
+                    hrNavbar.style.display = 'flex'; // Show regular navbar
+                } else {
+                    regularNavbar.style.display = 'flex'; // Show regular navbar
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        }
+    </script>
+    <div class="bodyTag">
+        <div class="form-container">
+            <h2 style="color: #007bff;">Add New User</h2>
+            <form id="registerForm" novalidate autocomplete="off">
+
+                <div class="form-group">
+                    <label for="role">Select Role</label>
+                    <select id="role" required>
+                        <option value="recruiter">Recruiter</option>
+                        <option value="manager">Manager</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input id="first_name" type="text" required />
+                    <p class="error-text" id="firstNameError"></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input id="last_name" type="text" required maxlength="20" minlength="1" />
+                    <p class="error-text" id="lastNameError"></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" required maxlength="60" pattern="\S+@\S+" />
+                    <p class="error-text" id="emailError"></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone_number">Phone Number</label>
+                    <input id="phone_number" type="tel" required minlength="10" maxlength="10" />
+                    <p class="error-text" id="phoneNumberError"></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" required maxlength="99" />
+                    <p class="error-text" id="passwordError"></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input id="address" type="text" required maxlength="99" />
+                    <p class="error-text" id="addressError"></p>
+                </div>
 
 
 
-            <div class="form-group">
-                <button type="submit">Register</button>
-            </div>
-        </form>
+                <div class="form-group">
+                    <button type="submit">Register</button>
+                </div>
+            </form>
+        </div>
+
     </div>
 
     <!-- Snackbar -->

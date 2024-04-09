@@ -24,7 +24,8 @@ const getProfile = catchAsync(async (req, res) => {
 const updateProfile = catchAsync(async (req, res) => {
   try {
     const userId = req.params.id;
-    console.log(userId, "userId in update profiel");
+
+    const fg = req.body;
     const userDetail = await User.findOneAndUpdate({ _id: userId }, req.body, {
       new: true,
     });
@@ -36,7 +37,7 @@ const updateProfile = catchAsync(async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       status: "500",
-      message: "An error occurred while updating user data !",
+      message: "An error occurred while updating user data!",
       error: error.message,
     });
   }
