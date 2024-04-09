@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List</title>
+    <style>
+        body {
+            background-color: #f0f4f7;
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 90%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #007bff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            white-space: nowrap;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .select-container {
+            margin-bottom: 20px;
+        }
+
+        .select-container select {
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .button-container {
+            margin-bottom: 20px;
+        }
+
+        .button-container button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-container button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+        }
+
+        .modal input {
+            width: calc(100% - 20px);
+            margin-bottom: 10px;
+            padding: 8px;
+        }
+
+        .modal button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>User List</h1>
+        <div class="select-container">
+            <label for="roleSelect">Select Role:</label>
+            <select id="roleSelect" onchange="fetchData()">
+                <option value="all">All</option>
+                <option value="admin">Admin</option>
+                <option value="recruiter">Recruiter</option>
+                <option value="manager">Manager</option>
+            </select>
+        </div>
+        <table id="userTable">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Address</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>ID</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="userData">
+                <!-- Table rows will be dynamically populated here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal overlay -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <!-- Edit Modal -->
+    <div class="modal" id="editModal">
+        <h2>Edit User</h2>
+        <form id="editForm">
+
+            <input type="hidden" id="userId" name="userId">
+
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" required><br>
+
+
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" required><br>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required><br>
+
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" required><br>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br>
+
+            <label for="role">Role:</label>
+            <select id="role" name="role">
+                <option value="admin">Admin</option>
+                <option value="recruiter">Recruiter</option>
+                <option value="manager">Manager</option>
+            </select><br>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+
+    <script>
+        async function fetchData() {
+            const roleSelect = document.getElementById('roleSelect');
+            const selectedRole = roleSelect.value;
+            const url = `http://localhost:4004/user/list?role=${selectedRole}`;
+
+            try {
+                const response = await fetch(url);
+                const responseData = await response.json();
+
+                if (responseData.status === '200') {
+                    renderUsers(responseData.data);
+                } else {
+                    console.error('Error fetching user list:', responseData.message);
+                }
+            } catch (error) {
+                console.error('Error fetching user list:', error);
+            }
+        }
+
+        function renderUsers(users) {
+            const userDataContainer = document.getElementById('userData');
+            let tableRows = '';
+
+            users.forEach(user => {
+                tableRows += `
+                    <tr>
+                        <td>${user.first_name}</td>
+                        <td>${user.last_name}</td>
+                        <td>${user.address}</td>
+                        <td>${user.phone_number}</td>
+                        <td>${user.email}</td>
+                        <td>${user.role}</td>
+                        <td>${user.id}</td>
+                        <td>
+                            <button class="editButton" onclick="openEditModal('${user.id}')">Edit</button>
+                            <button class="deleteButton" onclick="confirmDelete('${user.id}')">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            userDataContainer.innerHTML = tableRows;
+        }
+
+        async function openEditModal(userId) {
+            try {
+                const token = localStorage.getItem("token")
+
+                const response = await fetch(`http://localhost:4004/user/get-profile/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,
+                    },
+                });
+                const responseData = await response.json();
+
+                if (responseData.status === '200') {
+                    const user = responseData.data;
+                    populateEditForm(user); // This function populates the edit form with user data
+                    const editModal = document.getElementById('editModal');
+                    const modalOverlay = document.getElementById('modalOverlay');
+                    editModal.style.display = 'block';
+                    modalOverlay.style.display = 'block';
+                } else {
+                    console.error('Error fetching user data:', responseData.message);
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        }
+
+        function populateEditForm(user) {
+            const { first_name, last_name, address, phone_number, email, role, id } = user;
+            const editFormInputs = document.getElementById('editForm').elements;
+
+            editFormInputs.firstName.value = first_name;
+            editFormInputs.lastName.value = last_name;
+            editFormInputs.address.value = address;
+            editFormInputs.phoneNumber.value = phone_number;
+            editFormInputs.email.value = email;
+            editFormInputs.role.value = role;
+            editFormInputs.userId.value = id; // Store user ID in the hidden input field
+        }
+
+
+        async function confirmDelete(userId) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                try {
+                    const response = await fetch(`http://localhost:4004/auth/user/${userId}`, {
+                        method: 'DELETE',
+                    });
+                    const responseData = await response.json();
+
+                    if (responseData.status === '200') {
+                        alert('User deleted successfully!');
+                        fetchData(); // Refresh the user list
+                    } else {
+                        console.error('Error deleting user:', responseData.message);
+                    }
+                } catch (error) {
+                    console.error('Error deleting user:', error);
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const modalOverlay = document.getElementById('modalOverlay');
+            const editModal = document.getElementById('editModal');
+
+            // Close the modal when clicking outside or pressing Escape key
+            modalOverlay.addEventListener('click', () => {
+                editModal.style.display = 'none';
+                modalOverlay.style.display = 'none';
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    editModal.style.display = 'none';
+                    modalOverlay.style.display = 'none';
+                }
+            });
+
+            const editForm = document.getElementById('editForm');
+            editForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const formData = new FormData(event.target);
+                const data = {};
+                formData.forEach((value, key) => {
+                    data[key] = value;
+                });
+
+                const userId = editForm.elements.userId.value; // Get user ID from the hidden input field
+                console.log(userId, "userId");
+                try {
+                    const token = localStorage.getItem("token")
+                    const response = await fetch(`http://localhost:4004/user/update-profile/${userId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,
+                        },
+                        body: JSON.stringify(data),
+                    });
+                    const responseData = await response.json();
+
+                    if (responseData.status === '200') {
+                        alert('User data updated successfully!');
+                        fetchData(); // Refresh the user list
+                        editModal.style.display = 'none';
+                        modalOverlay.style.display = 'none';
+                    } else {
+                        console.error('Error updating user data:', responseData.message);
+                    }
+                } catch (error) {
+                    console.error('Error updating user data:', error);
+                }
+            });
+
+        });
+
+        fetchData(); // Fetch data initially
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Candidate</title>
+    <style>
+        body {
+            background-color: #f0f4f7;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label,
+        input,
+        select {
+            margin-bottom: 10px;
+        }
+
+        button[type="submit"] {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        #snackbar {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #333;
+            color: #fff;
+            padding: 16px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Add Candidate</h1>
+        <form id="candidateForm">
+            <!-- Qualification -->
+
+            <label for="candidateName">Name:</label>
+            <input type="text" id="candidateName" name="candidateName" required><br>
+
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" required><br>
+
+            <label for="qualification">Qualification:</label>
+            <input type="text" id="qualification" name="qualification" required><br>
+
+            <!-- Experience -->
+            <label for="experience">Experience:</label>
+            <input type="text" id="experience" name="experience" required><br>
+
+            <!-- Computer Skills -->
+            <label for="computerSkills">Computer Skills:</label>
+            <select id="computerSkills" name="computerSkills">
+                <option value="Introduction level">Introduction level</option>
+                <option value="Basic level">Basic level</option>
+                <option value="Intermediate level">Intermediate level</option>
+                <option value="Can work easily">Can work easily</option>
+            </select><br>
+
+            <!-- English Skills -->
+            <label for="englishSkills">English Skills:</label>
+            <select id="englishSkills" name="englishSkills">
+                <option value="Introduction level">Introduction level</option>
+                <option value="Basic level">Basic level</option>
+                <option value="Intermediate level">Intermediate level</option>
+                <option value="Can work easily">Can work easily</option>
+            </select><br>
+
+            <!-- Other Skills -->
+            <label for="otherSkills">Other Skills:</label>
+            <input type="text" id="otherSkills" name="otherSkills" required><br>
+
+            <!-- Remark -->
+            <label for="remark">Remark:</label>
+            <select id="remark" name="remark">
+                <option value="Selected">Selected</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Under Process">Under Process</option>
+            </select><br>
+
+            <!-- Category -->
+            <label for="category">Category:</label>
+            <select id="category" name="category">
+                <option value="Software Development">Software Development</option>
+                <option value="Sales">Sales</option>
+                <option value="Calling International">Calling International</option>
+                <option value="Calling Domestic">Calling Domestic</option>
+                <option value="Housekeeping">Housekeeping</option>
+                <option value="Day Clerical">Day Clerical</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Internet Marketing">Internet Marketing</option>
+                <option value="Graphic Design">Graphic Design</option>
+                <option value="Other">Other</option>
+            </select><br>
+
+            <!-- Detailed Remark -->
+            <label for="detailedRemark">Detailed Remark:</label>
+            <input type="text" id="detailedRemark" name="detailedRemark" required><br>
+
+            <!-- Next Callback -->
+            <label for="nextCallback">Next Callback:</label>
+            <input type="datetime-local" id="nextCallback" name="nextCallback"><br>
+
+            <!-- Task Assigned To (Dynamically populated dropdown) -->
+            <label for="taskAssignedTo">Task Assigned To:</label>
+            <select id="taskAssignedTo" name="taskAssignedTo"></select><br>
+
+            <!-- Task Assigned At -->
+            <label for="taskAssignedAt">Task Assigned At:</label>
+            <input type="datetime-local" id="taskAssignedAt" name="taskAssignedAt"><br>
+
+            <!-- Submit Button -->
+            <button type="submit">Submit</button>
+        </form>
+
+        <!-- Snackbar for displaying API response -->
+        <div id="snackbar"></div>
+    </div>
+
+    <!-- JavaScript for fetching data and form submission -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('http://localhost:4004/auth/adminList');
+                const responseData = await response.json();
+
+                const taskAssignedToSelect = document.getElementById('taskAssignedTo');
+                responseData.data.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = `${user.first_name} ${user.last_name}`;
+                    taskAssignedToSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        });
+
+        document.getElementById('candidateForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            const token = localStorage.getItem('token');
+            if (token) {
+                try {
+                    const response = await fetch('http://localhost:4004/candidate/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,
+                        },
+                        body: JSON.stringify(data),
+                    });
+                    const responseData = await response.json();
+
+                    const snackbar = document.getElementById('snackbar');
+                    snackbar.textContent = responseData.message;
+                    snackbar.style.display = 'block';
+
+                    setTimeout(() => {
+                        snackbar.style.display = 'none';
+                    }, 3000);
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            } else {
+                console.error('No token found in localStorage');
+            }
+        });
+    </script>
+</body>
+
+</html>

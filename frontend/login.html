@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f5ff;
+            /* Blue background */
+        }
+
+        form {
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            /* White background */
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            /* Box shadow */
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="submit"] {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            /* Blue button */
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            /* Smooth transition */
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+            /* Darker blue on hover */
+        }
+
+        /* Snackbar */
+        .snackbar {
+            visibility: hidden;
+            min-width: 250px;
+            margin-right: 30px;
+            /* Adjust right margin for positioning */
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            top: 20px;
+            /* Position from top */
+            right: 0;
+            /* Position from right */
+            font-size: 14px;
+        }
+
+        .snackbar.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from {
+                top: 0;
+                opacity: 0;
+            }
+
+            to {
+                top: 20px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeout {
+            from {
+                top: 20px;
+                opacity: 1;
+            }
+
+            to {
+                top: 0;
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <form id="loginForm">
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" required><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+
+        <input type="submit" value="Login">
+    </form>
+
+    <div id="snackbar" class="snackbar"></div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const snackbar = document.getElementById('snackbar');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            };
+
+            try {
+                const response = await fetch('http://localhost:4004/auth/login', requestOptions);
+                const data = await response.json();
+                const msg = data.message;
+                const token = data.data.tokens.access.token;
+
+                localStorage.setItem("token", JSON.stringify(token))
+                console.log(token, "tokennnnnn")
+                showSnackbar(msg);
+            } catch (error) {
+                showSnackbar('An error occurred, please try again.');
+            }
+        });
+
+        function showSnackbar(message) {
+            snackbar.textContent = message;
+            snackbar.classList.add('show');
+
+            setTimeout(() => {
+                snackbar.classList.remove('show');
+            }, 3000); // Adjust the time the snackbar is displayed (in milliseconds)
+        }
+    </script>
+
+</body>
+
+</html>
