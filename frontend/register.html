@@ -281,7 +281,7 @@
                 });
                 showSnackbar('User registered successfully!');
                 console.log(response.data); // Log the API response
-                window.location.href = 'login.html';
+
             } catch (error) {
                 showSnackbar(error.response.data.message);
             }
@@ -293,7 +293,8 @@
 
             setTimeout(() => {
                 snackbar.classList.remove('show');
-            }, 3000); // Adjust the time the snackbar is displayed (in milliseconds)
+                window.location.href = 'login.html';
+            }, 2000); // Adjust the time the snackbar is displayed (in milliseconds)
         }
     </script>
 </body>

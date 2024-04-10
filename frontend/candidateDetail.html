@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Details</title>
+    <style>
+        /* Some basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .details {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Candidate Details</h1>
+        <div class="details" id="candidateDetails">
+            <!-- Candidate details will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        // Function to fetch candidate details
+        function fetchCandidateDetails() {
+            // Get the candidate ID from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const candidateId = urlParams.get('id');
+
+            // Get authorization token from localStorage
+            const token = localStorage.getItem('token');
+
+            // Make API request to fetch candidate details
+            fetch(`http://localhost:4004/candidate/get/${candidateId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Display candidate details on the page
+                    const candidateDetailsContainer = document.getElementById('candidateDetails');
+                    candidateDetailsContainer.innerHTML = `
+                    <p><strong>Recruiter Name:</strong> ${data.data.recruiterId.first_name} ${data.data.recruiterId.last_name}</p>
+                    <p><strong>Address:</strong> ${data.data.recruiterId.address}</p>
+                    <p><strong>Phone Number:</strong> ${data.data.recruiterId.phone_number}</p>
+                    <p><strong>Email:</strong> ${data.data.recruiterId.email}</p>
+                    <p><strong>Role:</strong> ${data.data.recruiterId.role}</p>
+                    <hr>
+                    <p><strong>Qualification:</strong> ${data.data.qualification}</p>
+                    <p><strong>Resume:</strong> <a href="${data.data.resume}" target="_blank">View Resume</a></p>
+                    <p><strong>Phone Number:</strong> ${data.data.phoneNumber}</p>
+                    <p><strong>Experience:</strong> ${data.data.experience}</p>
+                    <p><strong>Computer Skills:</strong> ${data.data.computerSkills}</p>
+                    <p><strong>English Skills:</strong> ${data.data.englishSkills}</p>
+                    <p><strong>Other Skills:</strong> ${data.data.otherSkills}</p>
+                    <p><strong>Remark:</strong> ${data.data.remark}</p>
+                    <p><strong>Category:</strong> ${data.data.category}</p>
+                    <hr>
+                    <p><strong>Added Remarks:</strong></p>
+                    <ul>
+                        ${data.data.detailedRemarks.map(remark => `<li>${remark.remark} - ${remark.date}</li>`).join('')}
+                    </ul>
+                    <p><strong>Next Callback:</strong> ${data.data.nextCallback ? data.data.nextCallback : 'N/A'}</p>
+                    <p><strong>Task Assigned To:</strong> ${data.data.taskAssignedTo.first_name} ${data.data.taskAssignedTo.last_name}</p>
+                    <p><strong>Task Assigned At:</strong> ${data.data.taskAssignedAt ? data.data.taskAssignedAt : 'N/A'}</p>
+                `;
+                })
+                .catch(error => {
+                    console.error('Error fetching candidate details:', error);
+                });
+        }
+
+        // Call fetchCandidateDetails function when the page loads
+        window.onload = fetchCandidateDetails;
+    </script>
+</body>
+
+</html>

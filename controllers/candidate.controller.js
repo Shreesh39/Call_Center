@@ -58,7 +58,9 @@ const createCandidate = catchAsync(async (req, res) => {
 const getCandidate = catchAsync(async (req, res) => {
   try {
     const candidateId = req.params.id;
-    const candidateDetail = await Candidate.findById(candidateId);
+    const candidateDetail = await Candidate.findById(candidateId)
+      .populate("recruiterId")
+      .populate("taskAssignedTo");
     return res.status(200).json({
       status: "200",
       message: "Candidate data fetched successfully!",

@@ -297,6 +297,20 @@
 
     <!-- JavaScript for fetching and manipulating data -->
     <script>
+        function navigateToCandidateDetail(candidateId) {
+            // Construct the URL with the candidate ID
+            var url = `candidateDetail.html?id=${candidateId}`;
+
+            // Redirect the user to the constructed URL
+            window.location.href = url;
+        }
+        function downloadResume(resumeUrl) {
+            var link = document.createElement('a');
+            link.href = resumeUrl;
+            // link.setAttribute('download', 'resume.pdf');
+            link.setAttribute('target', '_blank');
+            link.click();
+        }
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem('token');
             const candidateTable = document.getElementById('candidateTable');
@@ -327,7 +341,7 @@
             function renderCandidates(candidates) {
                 let tableRows = '';
                 candidates.forEach(candidate => {
-                    const { recruiterId, qualification, candidateName, phoneNumber, experience, computerSkills, englishSkills, otherSkills, remark, category, id } = candidate;
+                    const { resume, recruiterId, qualification, candidateName, phoneNumber, experience, computerSkills, englishSkills, otherSkills, remark, category, id } = candidate;
                     const recruiterName = candidate.recruiterId.first_name;
                     tableRows += `
                         <tr>
@@ -344,6 +358,9 @@
                             <td>
                                 <button class="editButton" data-id="${id}">Edit</button>
                                 <button class="deleteButton" data-id="${id}">Delete</button>
+                                <button onclick="downloadResume('${resume}')" class="downloadButton">Resume</button>
+                                <button onclick="navigateToCandidateDetail('${id}')" class="downloadButton">View Candidate</button>
+
                             </td>
                         </tr>
                     `;

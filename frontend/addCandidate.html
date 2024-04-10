@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./upload.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css">
 
     <title>Add Candidate</title>
     <style>
@@ -58,6 +61,54 @@
             color: #fff;
             padding: 16px;
             border-radius: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
         }
     </style>
 </head>
@@ -142,9 +193,57 @@
             }
         }
     </script>
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById('file');
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch('http://localhost:4004/upload', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const snackbar = document.getElementById('snackbar');
+                    snackbar.textContent = "Resume Uploaded successfully !";
+                    snackbar.style.display = 'block';
+                    const resumeFile = data?.file
+
+                    localStorage.setItem('fileVal', resumeFile);
+
+                    setTimeout(() => {
+                        snackbar.style.display = 'none';
+                    }, 3000);
+                    const messageDiv = document.getElementById('message');
+                    if (data.status === 200) {
+                        messageDiv.className = 'message success';
+                        messageDiv.innerText = data.message + ' File URL: ' + data.file;
+
+                    } else {
+                        messageDiv.className = 'message error';
+                        messageDiv.innerText = data.message;
+                    }
+                    messageDiv.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    const messageDiv = document.getElementById('message');
+                    messageDiv.className = 'message error';
+                    messageDiv.innerText = 'An error occurred. Please try again later.';
+                    messageDiv.style.display = 'block';
+                });
+        }
+    </script>
     <div class="bodyTag">
         <div class="container">
             <h1>Add Candidate</h1>
+
+
+            <!-- <div class="form-group">
+                <button onclick="uploadFile()">Upload</button>
+            </div> -->
             <form id="candidateForm">
                 <!-- Qualification -->
 
@@ -221,7 +320,12 @@
                 <!-- Task Assigned At -->
                 <label for="taskAssignedAt">Task Assigned At:</label>
                 <input type="datetime-local" id="taskAssignedAt" name="taskAssignedAt"><br>
-
+                <div class='file file--upload'>
+                    <label for='file'>
+                        <i class="material-icons">cloud_upload</i>Upload
+                    </label>
+                    <input type="file" id="file" accept=".pdf">
+                </div>
                 <!-- Submit Button -->
                 <button type="submit">Submit</button>
             </form>
@@ -235,7 +339,11 @@
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                const response = await fetch('http://localhost:4004/auth/adminList');
+                const fileInput = document.getElementById('file');
+                fileInput.addEventListener('change', () => {
+                    uploadFile();
+                });
+                const response = await fetch(`http://localhost:4004/user/list?role=admin`);
                 const responseData = await response.json();
 
                 const taskAssignedToSelect = document.getElementById('taskAssignedTo');
@@ -254,10 +362,16 @@
             event.preventDefault();
 
             const formData = new FormData(event.target);
+            const fileVal = localStorage.getItem('fileVal');
+            formData.append('resume', fileVal);
+
+
             const data = {};
             formData.forEach((value, key) => {
                 data[key] = value;
             });
+
+
 
             const token = localStorage.getItem('token');
             if (token) {
