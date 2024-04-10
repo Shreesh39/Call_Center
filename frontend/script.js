@@ -11,9 +11,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   logoutBtn.addEventListener("click", () => {
-    // Clear token from localStorage
-    localStorage.removeItem("token");
-    // Redirect to login page
-    window.location.href = "login.html";
+    const isConfirmed = window.confirm("Are you sure you want to log out?");
+    if (isConfirmed) {
+      localStorage.removeItem("token");
+      window.location.href = "login.html";
+    }
   });
 });

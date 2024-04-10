@@ -2,7 +2,7 @@ const landing = (req, res) => {
   const responseContent = `
     <html>
       <head>
-        <title>ART Server</title>
+        <title>HRMS Server</title>
         <style>
           body {
             font-family: 'Arial', sans-serif;
@@ -31,10 +31,9 @@ const landing = (req, res) => {
         </style>
       </head>
       <body>
-        <h1>Hello! Welcome to our Server</h1>
+        <h1>Hello! Welcome to our HRMS</h1>
         <p><strong>It is working properly</strong></p>
-        <p>These server side API is working using NodeJs.</p>
-        <p><span>A.R. Tyagi</span></p>
+        <p><span>BBB</span></p>
       </body>
     </html>
   `;
