@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Dashboard</title>
+    <style>
+        /* Styles unchanged */
+    </style>
+</head>
+
+<body>
+
+    <div class="container" id="taskContainer">
+        <!-- Tasks will be added here dynamically -->
+    </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <input type="text" id="newRemark" placeholder="Enter new remark">
+            <button onclick="submitRemark()">Submit Remark</button>
+        </div>
+    </div>
+
+    <script>
+        // Fetch data from the API and create cards for each task
+        const token = localStorage.getItem('token');
+
+        fetch('http://localhost:4004/user/get-task', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                const taskContainer = document.getElementById('taskContainer');
+
+                data.data.forEach(task => {
+                    const card = document.createElement('div');
+                    card.classList.add('card');
+                    card.innerHTML = `
+                <h2>${task.candidateName}</h2>
+                <p>Qualification: ${task.qualification}</p>
+                <p>Phone Number: ${task.phoneNumber}</p>
+                <div id="remarks-${task._id}">
+                    ${renderRemarks(task.detailedRemarks)}
+                </div>
+                <hr/>
+                <button onclick="openModal('${task._id}')">Add Remark</button>
+            `;
+                    taskContainer.appendChild(card);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+
+        // Function to render remarks
+        function renderRemarks(remarks) {
+            let html = '';
+            remarks.forEach(remark => {
+                html += `
+            <p><strong>${remark.addedBy.first_name} ${remark.addedBy.last_name}:</strong> ${remark.remark}</p>
+            <p>Date: ${new Date(remark.date).toLocaleString()}</p>
+            <hr/>
+        `;
+            });
+            return html;
+        }
+
+        // Function to open modal
+        function openModal(taskId) {
+            const modal = document.getElementById('myModal');
+            const span = document.getElementsByClassName("close")[0];
+            modal.style.display = "block";
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+            // Set taskId in a hidden field inside the modal
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.value = taskId;
+            hiddenInput.id = 'taskId';
+            modal.querySelector('.modal-content').appendChild(hiddenInput);
+        }
+
+        // Function to submit remark
+        function submitRemark() {
+            const token = localStorage.getItem('token');
+            const taskId = document.getElementById('taskId').value;
+            const newRemark = document.getElementById('newRemark').value;
+
+            fetch('http://localhost:4004/user/add-remark', {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ taskId: taskId, newRemark: newRemark })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle response if needed
+                    console.log(data);
+                    // Close modal after submitting remark
+                    document.getElementById('myModal').style.display = "none";
+                    // Reload page to reflect changes
+                    location.reload();
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+</body>
+
+</html>
