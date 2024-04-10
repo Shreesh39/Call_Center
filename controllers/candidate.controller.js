@@ -1,6 +1,6 @@
 const catchAsync = require("../utils/catchAsync");
 const { Candidate } = require("../models");
-
+const mongoose = require("mongoose");
 // --------------- Create candidate Detail ------------------
 // const createCandidate = catchAsync(async (req, res) => {
 //   try {
@@ -164,10 +164,99 @@ const getCandidateList = catchAsync(async (req, res) => {
   }
 });
 
+const getMyCandidateList = catchAsync(async (req, res) => {
+  const searchName = req.query.name;
+  const recruiterName = req.query.recruiter;
+  const currentUser = req.user;
+  const perPage = 9; //  Number of documents to display on each page
+  const page = req.query.page ? parseInt(req.query.page, 10) : 1; // It specify the selected page number
+
+  let query = { recruiterId: mongoose.Types.ObjectId(currentUser) };
+  if (recruiterName) {
+    query = { recruiterId: recruiterName };
+  }
+
+  if (searchName) {
+    const searchValue = new RegExp(searchName, "i");
+    query.$or = [{ title: searchValue }, { author: searchValue }];
+  } // You can search candidate through title or author
+
+  try {
+    const totalCount = await Candidate.countDocuments(query);
+
+    const candidateList = await Candidate.find(query)
+      .populate("recruiterId")
+      .populate("taskAssignedTo")
+      .skip(perPage * (page - 1))
+      .limit(perPage);
+
+    return res.status(200).json({
+      status: "200",
+      message: "Candidate list fetched successfully!",
+      data: candidateList,
+      page,
+      totalPages: Math.ceil(totalCount / perPage),
+      count: candidateList.length,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "500",
+      message: "An error occurred while fetching candidate list!",
+      error: error.message,
+    });
+  }
+});
+
+// -------------------- Add candidate Remarks  ------------------
+const addRemarksCandidate = catchAsync(async (req, res) => {
+  try {
+    // Extract necessary data from the request
+    const { newRemark, taskId } = req.body;
+    // const addedBy = req.user; // Assuming your authentication middleware sets req.user with user information
+
+    const addedBy = mongoose.Types.ObjectId(req.user);
+    // Find the candidate using the taskId and update the detailed remarks
+    const candidate = await Candidate.findOneAndUpdate(
+      { _id: taskId },
+      {
+        $push: {
+          detailedRemarks: {
+            remark: newRemark,
+            addedby: addedBy,
+            date: new Date(),
+          },
+        },
+      },
+      { new: true }
+    );
+
+    if (!candidate) {
+      return res.status(400).json({
+        status: "400",
+        message: "Candidate not found!",
+      });
+    }
+
+    return res.status(200).json({
+      status: "200",
+      message: "Detailed remark added successfully!",
+      data: candidate,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "500",
+      message: "An error occurred while adding remaks for candidate !",
+      error: error.message,
+    });
+  }
+});
+
 module.exports = {
   createCandidate,
   getCandidate,
   updateCandidate,
   getCandidateList,
   deleteCandidate,
+  getMyCandidateList,
+  addRemarksCandidate,
 };

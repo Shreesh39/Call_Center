@@ -28,6 +28,7 @@ const updateProfile = catchAsync(async (req, res) => {
     const userId = req.params.id;
 
     const fg = req.body;
+    console.log(fg, "fg");
     const userDetail = await User.findOneAndUpdate({ _id: userId }, req.body, {
       new: true,
     });
@@ -69,7 +70,11 @@ const usersList = catchAsync(async (req, res) => {
 
     let query = {};
     if (roles && roles !== "all") {
-      query = { role: roles };
+      if (roles == "top") {
+        query = { role: { $nin: "recruiter" } };
+      } else {
+        query = { role: roles };
+      }
     }
     const userDetail = await User.find(query);
     return res.status(200).json({
@@ -187,20 +192,20 @@ const taskList = catchAsync(async (req, res) => {
   try {
     const userId = req.user;
     const userDetail = await Candidate.aggregate([
-      { 
-        $match: { taskAssignedTo: mongoose.Types.ObjectId(userId) } 
+      {
+        $match: { taskAssignedTo: mongoose.Types.ObjectId(userId) },
       },
-      { 
+      {
         $lookup: {
-          from: 'users', // Assuming the name of the User model is 'User' and the collection name is 'users'
-          localField: 'detailedRemarks.addedby',
-          foreignField: '_id',
-          as: 'addedBy'
-        }
+          from: "users", // Assuming the name of the User model is 'User' and the collection name is 'users'
+          localField: "detailedRemarks.addedby",
+          foreignField: "_id",
+          as: "addedBy",
+        },
       },
       {
         $addFields: {
-          "detailedRemarks": {
+          detailedRemarks: {
             $map: {
               input: "$detailedRemarks",
               as: "detail",
@@ -213,18 +218,18 @@ const taskList = catchAsync(async (req, res) => {
                         {
                           $filter: {
                             input: "$addedBy",
-                            cond: { $eq: ["$$this._id", "$$detail.addedby"] }
-                          }
+                            cond: { $eq: ["$$this._id", "$$detail.addedby"] },
+                          },
                         },
-                        0
-                      ]
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        }
+                        0,
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
       },
       {
         $project: {
@@ -235,9 +240,78 @@ const taskList = catchAsync(async (req, res) => {
           "detailedRemarks.remark": 1,
           "detailedRemarks.date": 1,
           "detailedRemarks.addedBy.first_name": 1,
-          "detailedRemarks.addedBy.last_name": 1
-        }
-      }
+          "detailedRemarks.addedBy.last_name": 1,
+        },
+      },
+    ]);
+    return res.status(200).json({
+      status: "200",
+      message: `All upcoming tasks fetched successfully.`,
+      data: userDetail,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "500",
+      message: "An error occurred while fetching upcoming tasks!",
+      error: error.message,
+    });
+  }
+});
+const myTaskList = catchAsync(async (req, res) => {
+  try {
+    const userId = req.user;
+    const userDetail = await Candidate.aggregate([
+      {
+        $match: { recruiterId: mongoose.Types.ObjectId(userId) },
+      },
+      {
+        $lookup: {
+          from: "users", // Assuming the name of the User model is 'User' and the collection name is 'users'
+          localField: "detailedRemarks.addedby",
+          foreignField: "_id",
+          as: "addedBy",
+        },
+      },
+      {
+        $addFields: {
+          detailedRemarks: {
+            $map: {
+              input: "$detailedRemarks",
+              as: "detail",
+              in: {
+                $mergeObjects: [
+                  "$$detail",
+                  {
+                    addedBy: {
+                      $arrayElemAt: [
+                        {
+                          $filter: {
+                            input: "$addedBy",
+                            cond: { $eq: ["$$this._id", "$$detail.addedby"] },
+                          },
+                        },
+                        0,
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          recruiterId: 1,
+          qualification: 1,
+          candidateName: 1,
+          phoneNumber: 1,
+          "detailedRemarks.remark": 1,
+          "detailedRemarks.date": 1,
+          "detailedRemarks.addedBy.first_name": 1,
+          "detailedRemarks.addedBy.last_name": 1,
+        },
+      },
     ]);
     return res.status(200).json({
       status: "200",
@@ -253,11 +327,11 @@ const taskList = catchAsync(async (req, res) => {
   }
 });
 
-
 module.exports = {
   getProfile,
   updateProfile,
   deleteProfile,
   usersList,
   taskList,
+  myTaskList,
 };

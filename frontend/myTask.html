@@ -203,7 +203,6 @@
             }
         }
     </script>
-
     <div class="container" id="taskContainer">
         <!-- Tasks will be added here dynamically -->
     </div>
@@ -220,7 +219,7 @@
     <script>
         // Fetch data from the API and create cards for each task
 
-        fetch('http://localhost:4004/user/get-task', {
+        fetch('http://localhost:4004/user/get-my-task', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,

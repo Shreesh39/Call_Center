@@ -230,7 +230,7 @@
     </script>
     <div class="bodyTag">
         <div class="container">
-            <h1>My Candidate list</h1>
+            <h1>Candidate List Admin</h1>
             <div class="button-container">
                 <!-- <button id="addCandidateButton">Add Candidate</button> -->
                 <a href="#" id="refreshButton" style="display: none;">Refresh List</a>
@@ -238,9 +238,8 @@
             <table id="candidateTable">
                 <thead>
                     <tr>
-                        <th>Recruiter Name</th>
-                        <th>Qualification</th>
                         <th>Candidate Name</th>
+                        <th>Qualification</th>
                         <th>Phone Number</th>
                         <th>Experience</th>
                         <th>Computer Skills</th>
@@ -248,6 +247,7 @@
                         <th>Other Skills</th>
                         <th>Remark</th>
                         <th>Category</th>
+                        <th>Recruiter Name</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -348,7 +348,7 @@
 
             refreshButton.addEventListener('click', async () => {
                 try {
-                    const response = await fetch('http://localhost:4004/candidate/myList', {
+                    const response = await fetch('http://localhost:4004/candidate/list', {
                         headers: {
                             'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,
                         },
@@ -372,9 +372,8 @@
                     const recruiterName = candidate.recruiterId.first_name;
                     tableRows += `
                         <tr>
-                            <td>${recruiterName}</td>
-                            <td>${qualification}</td>
                             <td>${candidateName}</td>
+                            <td>${qualification}</td>
                             <td>${phoneNumber}</td>
                             <td>${experience}</td>
                             <td>${computerSkills}</td>
@@ -382,6 +381,7 @@
                             <td>${otherSkills}</td>
                             <td>${remark}</td>
                             <td>${category}</td>
+                            <td>${recruiterName}</td>
                             <td>
                                 <button class="editButton" data-id="${id}">Edit</button>
                                 <button class="deleteButton" data-id="${id}">Delete</button>

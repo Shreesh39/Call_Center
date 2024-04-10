@@ -14,7 +14,11 @@
   display: flex;
   gap: 20px;
 }
-
+.panelType {
+  color: #fff;
+  font-size: 21px;
+  font-weight: 600;
+}
 .nav-link {
   color: #fff;
   text-decoration: none;
@@ -29,7 +33,18 @@
 
 .admin-navbar,
 .hr-navbar,
+.manager-navbar,
 .regular-navbar {
   display: none;
   /* Initially hide both navbars */
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f4f7;
+  margin: 0;
+  padding: 0;
+}
+.logo img {
+  border-radius: 6px;
 }
