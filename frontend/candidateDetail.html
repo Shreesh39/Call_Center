@@ -26,127 +26,44 @@
 
         h1 {
             text-align: center;
+            margin-bottom: 20px;
         }
 
-        .details {
-            margin-top: 20px;
+        .details-section {
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .details-section h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .details-section p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .details-section ul {
+            padding-left: 20px;
+        }
+
+        .details-section a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .details-section a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
-    <!-- Admin Navbar -->
-    <nav class="admin-navbar navbar">
-        <!-- Your admin navbar content here -->
-        <div class="logo">
-            <img src="./HRM.jpg" alt="Admin Logo">
-        </div>
-        <div class="panelType">Admin Panel</div>
-        <div class="nav-links">
-            <a href="newTask.html" class="nav-link">Events</a>
-            <a href="addUser.html" class="nav-link">Add User</a>
-            <a href="userList.html" class="nav-link">User List</a>
-            
-            <a href="addCandidate.html" class="nav-link">Add Candidate</a>
-            <a href="allCandidateList.html" class="nav-link">Candidates List</a>
-            <!-- <a href="addCandidate.html" class="nav-link">Add Candidate</a> -->
-            <button class="logout-btn">Logout</button>
-        </div>
-    </nav>
-
-    <nav class="hr-navbar navbar">
-        <!-- Your admin navbar content here -->
-        <div class="logo">
-            <img src="./HRM.jpg" alt="HR Logo">
-        </div>
-        <div class="panelType">Recruiter Panel</div>
-
-        <div class="nav-links">
-                <a href="newTask.html" class="nav-link">New Events</a>
-            <a href="myTask.html" class="nav-link">My Events</a>
-            <a href="addCandidate.html" class="nav-link">Add Candidate</a>
-            <a href="candidateList.html" class="nav-link">Candidates List</a>
-            <button class="logout-btn2">Logout</button>
-        </div>
-    </nav>
-
-    <nav class="manager-navbar navbar">
-        <!-- Your admin navbar content here -->
-        <div class="logo">
-            <img src="./HRM.jpg" alt="Manager Logo">
-        </div>
-        <div class="panelType">Manager Panel</div>
-
-        <div class="nav-links">
-                <a href="newTask.html" class="nav-link">New Events</a>
-            <a href="myTask.html" class="nav-link">My Events</a>
-            <a href="addCandidate.html" class="nav-link">Add Candidate</a>
-            <a href="candidateList.html" class="nav-link">Candidates List</a>
-            <button class="logout-btn3">Logout</button>
-        </div>
-    </nav>
-
-    <!-- Regular Navbar -->
-    <nav class="regular-navbar navbar">
-        <!-- Your regular navbar content here -->
-        <div class="logo">
-            <img src="./HRM.jpg" alt="Logo">
-        </div>
-        <div class="nav-links">
-            <a href="login.html" class="nav-link">Login</a>
-            <a href="register.html" class="nav-link">Register</a>
-        </div>
-    </nav>
-
-
-    <script src="script.js"></script>
-    <script>
-        const token = localStorage.getItem('token');
-        const adminNavbar = document.querySelector('.admin-navbar');
-        const regularNavbar = document.querySelector('.regular-navbar');
-        const hrNavbar = document.querySelector('.hr-navbar');
-        const managerNavbar = document.querySelector('.manager-navbar');
-
-        if (token) {
-            fetchUserData(); // Call the function to fetch user data
-        } else {
-            // Show regular navbar if no token found
-            regularNavbar.style.display = 'flex';
-        }
-
-        async function fetchUserData() {
-            const requestOptions = {
-                method: 'GET',
-                headers: {
-                    'Accept': '*/*',
-                    'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,
-                    'Sec-Fetch-Mode': 'cors',
-                    'Sec-Fetch-Site': 'cross-site'
-                }
-            };
-
-            console.log("fffffffffffffffffffffffff");
-
-            try {
-                const response = await fetch('http://localhost:4004/auth/me', requestOptions);
-                const data = await response.json();
-                console.log(data, "data in loggs");
-                if (data.role == 'admin') {
-                    adminNavbar.style.display = 'flex'; // Show admin navbar
-                } else if (data.role == 'recruiter') {
-                    hrNavbar.style.display = 'flex'; // Show regular navbar
-                } else if (data.role == 'manager') {
-                    managerNavbar.style.display = 'flex'; // Show regular navbar
-                } else {
-                    regularNavbar.style.display = 'flex'; // Show regular navbar
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        }
-    </script>
     <div class="container">
-
         <h1>Candidate Details</h1>
         <div class="details" id="candidateDetails">
             <!-- Candidate details will be displayed here -->
@@ -155,58 +72,66 @@
 
     <script>
         // Function to fetch candidate details
-        function fetchCandidateDetails() {
-            // Get the candidate ID from the URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const candidateId = urlParams.get('id');
+function fetchCandidateDetails() {
+    // Get the candidate ID from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const candidateId = urlParams.get('id');
 
-            // Get authorization token from localStorage
-            const token = localStorage.getItem('token');
+    // Get authorization token from localStorage
+    const token = localStorage.getItem('token');
 
-            // Make API request to fetch candidate details
-            fetch(`http://localhost:4004/candidate/get/${candidateId}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    // Display candidate details on the page
-                    const candidateDetailsContainer = document.getElementById('candidateDetails');
-                    candidateDetailsContainer.innerHTML = `
-                    <p><strong>Recruiter Name:</strong> ${data.data.recruiterId.first_name} ${data.data.recruiterId.last_name}</p>
-                  
-                    <hr>
-                    <p><strong>Candidate Name:</strong> ${data.data.candidateName}</p>
-                    <p><strong>Qualification:</strong> ${data.data.qualification}</p>
-                    <p><strong>Resume:</strong> <a href="${data.data.resume}" target="_blank">View Resume</a></p>
-                    <p><strong>Phone Number:</strong> ${data.data.phoneNumber}</p>
-                    <p><strong>Experience:</strong> ${data.data.experience} years</p>
-                    <p><strong>Computer Skills:</strong> ${data.data.computerSkills}</p>
-                    <p><strong>English Skills:</strong> ${data.data.englishSkills}</p>
-                    <p><strong>Other Skills:</strong> ${data.data.otherSkills}</p>
-                    <p><strong>Remark:</strong> ${data.data.remark}</p>
-                    <p><strong>Category:</strong> ${data.data.category}</p>
-                    <hr>
-                  
-                    <p><strong>Next Callback:</strong> ${(data.data.nextCallback !== 'N/A' ? new Date(data.data.nextCallback).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A')}</p>
-
-                    <p><strong>Task assigned to:</strong> ${data.data.taskAssignedTo.first_name} ${data.data.taskAssignedTo.last_name}</p>
-                    
-                    <p><strong>Task assigned at:</strong> ${(data.data.taskAssignedAt !== 'N/A' ? new Date(data.data.taskAssignedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A')}</p>
-                    <hr/>
-                    <p><strong>Added Remarks:</strong></p>
-                    <ul>
-                        ${data.data.detailedRemarks.map(remark => `<li>${remark.remark} </li>`).join('')}
-                    </ul>
-                `;
-                })
-                .catch(error => {
-                    console.error('Error fetching candidate details:', error);
-                });
+    // Make API request to fetch candidate details
+    fetch(`http://localhost:4004/candidate/get/${candidateId}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,
+            'Content-Type': 'application/json'
         }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Display candidate details on the page
+        const candidateDetailsContainer = document.getElementById('candidateDetails');
+        candidateDetailsContainer.innerHTML = `
+            <div class="details-section">
+                <h3>Personal Information</h3>
+                <p><strong>Recruiter Name:</strong> ${data.data.recruiterId.first_name} ${data.data.recruiterId.last_name}</p>
+                <p><strong>Candidate Name:</strong> ${data.data.candidateName}</p>
+                <p><strong>Phone Number:</strong> ${data.data.phoneNumber}</p>
+            </div>
+            <div class="details-section">
+                <h3>Educational Background</h3>
+                <p><strong>Qualification:</strong> ${data.data.qualification}</p>
+            </div>
+            <div class="details-section">
+                <h3>Skills</h3>
+                <p><strong>Experience:</strong> ${data.data.experience} years</p>
+                <p><strong>Computer Skills:</strong> ${data.data.computerSkills}</p>
+                <p><strong>English Skills:</strong> ${data.data.englishSkills}</p>
+                <p><strong>Other Skills:</strong> ${data.data.otherSkills}</p>
+            </div>
+            <div class="details-section">
+                <h3>Additional Details</h3>
+                <p><strong>Remark:</strong> ${data.data.remark}</p>
+                <p><strong>Category:</strong> ${data.data.category}</p>
+                <p><strong>Next Callback:</strong> ${(data.data.nextCallback !== 'N/A' ? new Date(data.data.nextCallback).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A')}</p>
+                <p><strong>Task assigned to:</strong> ${data.data.taskAssignedTo.first_name} ${data.data.taskAssignedTo.last_name}</p>
+                <p><strong>Task assigned at:</strong> ${(data.data.taskAssignedAt !== 'N/A' ? new Date(data.data.taskAssignedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A')}</p>
+                <p><strong>Resume:</strong> <a href="${data.data.resume}" target="_blank">View Resume</a></p>
+            </div>
+            <div class="details-section">
+                <h3>Added Remarks</h3>
+                <ul>
+                    ${data.data.detailedRemarks.map(remark => `<li>${remark.remark} - ${new Date(remark.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+    })
+    .catch(error => {
+        console.error('Error fetching candidate details:', error);
+    });
+}
+
 
         // Call fetchCandidateDetails function when the page loads
         window.onload = fetchCandidateDetails;
@@ -214,8 +139,3 @@
 </body>
 
 </html>
-
-<!-- 
-<ul>
-    ${data.data.detailedRemarks.map(remark => `<li>${remark.remark} - ${remark.date}</li>`).join('')}
-</ul> -->
