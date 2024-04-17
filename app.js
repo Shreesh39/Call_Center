@@ -70,4 +70,4 @@ app.post("/upload", uploadFile.single("file"), fileUP);
 require("./config/config");
 require("./routes/router")(app);
 
-app.use("/vq", routes);
+app.use("/", routes);
