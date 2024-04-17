@@ -135,6 +135,37 @@
 .modal button:hover {
     background-color: #0056b3;
 }
+        /* CSS for action buttons */
+.editButton {
+    padding: 8px 16px;
+    background-color: #007bff; /* Blue color */
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.editButton:hover {
+    background-color: #0056b3; /* Darker blue color on hover */
+}
+
+.deleteButton {
+    padding: 8px 16px;
+    background-color: #dc3545; /* Red color */
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.deleteButton:hover {
+    background-color: #c82333; /* Darker red color on hover */
+}
+
 
     </style>
 </head>
@@ -148,6 +179,7 @@
         </div>
         <div class="panelType">Admin Panel</div>
         <div class="nav-links">
+            <a href="myTask.html" class="nav-link">My Events</a>
             <a href="newTask.html" class="nav-link">Events</a>
             <a href="addUser.html" class="nav-link">Add User</a>
             <a href="userList.html" class="nav-link">User List</a>
