@@ -135,7 +135,7 @@
 
             <a href="addUser.html" class="nav-link">Add User</a>
             <a href="userList.html" class="nav-link">User List</a>
-            
+
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="allCandidateList.html" class="nav-link">Candidates List</a>
             <!-- <a href="addCandidate.html" class="nav-link">Add Candidate</a> -->
@@ -151,7 +151,7 @@
         <div class="panelType">Recruiter Panel</div>
 
         <div class="nav-links">
-                <a href="newTask.html" class="nav-link">New Events</a>
+            <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="candidateList.html" class="nav-link">Candidates List</a>
@@ -167,7 +167,7 @@
         <div class="panelType">Manager Panel</div>
 
         <div class="nav-links">
-                <a href="newTask.html" class="nav-link">New Events</a>
+            <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="candidateList.html" class="nav-link">Candidates List</a>
@@ -314,6 +314,16 @@
                     }
                 });
                 showSnackbar('User registered successfully!');
+
+
+                setTimeout(() => {
+                    if (response.data.status == 200) {
+                        window.location.href = 'login.html';
+                    }
+                }, 2000);
+
+
+
                 console.log(response.data); // Log the API response
 
             } catch (error) {
@@ -327,7 +337,7 @@
 
             setTimeout(() => {
                 snackbar.classList.remove('show');
-                window.location.href = 'login.html';
+
             }, 2000); // Adjust the time the snackbar is displayed (in milliseconds)
         }
     </script>
