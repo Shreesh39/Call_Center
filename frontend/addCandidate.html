@@ -6,129 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="./upload.css">
+    <link rel="stylesheet" href="addcandidate.css">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css">
 
     <title>Add Candidate</title>
     <style>
-       .bodyTag {
-    background-color: #f0f4f7;
-    font-family: Arial, sans-serif;
-    color: #333;
-}
 
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-label,
-input,
-select {
-    margin-bottom: 15px;
-}
-
-input[type="text"],
-select {
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-button[type="submit"] {
-    margin-top: 20px;
-    padding: 12px 24px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button[type="submit"]:hover {
-    background-color: #45a049;
-}
-
-#snackbar {
-    display: none;
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color: #333;
-    color: #fff;
-    padding: 16px;
-    border-radius: 8px;
-}
-
-.form-group {
-    margin-bottom: 30px;
-}
-
-.form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.form-group input[type="file"] {
-    width: 100%;
-    padding: 15px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-}
-
-.form-group button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.form-group button:hover {
-    background-color: #0056b3;
-}
-
-.message {
-    margin-top: 30px;
-    padding: 15px;
-    border-radius: 8px;
-}
-
-.success {
-    background-color: #dff0d8;
-    border-color: #d6e9c6;
-    color: #3c763d;
-}
-
-.error {
-    background-color: #f2dede;
-    border-color: #ebccd1;
-    color: #a94442;
-}
-#nextCallback {
-
-height: 40px;
-}
-#taskAssignedAt {
-
-height: 40px;
-}
 
 
     </style>
@@ -146,7 +30,7 @@ height: 40px;
             <a href="newTask.html" class="nav-link">Events</a>
             <a href="addUser.html" class="nav-link">Add User</a>
             <a href="userList.html" class="nav-link">User List</a>
-            
+
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="allCandidateList.html" class="nav-link">Candidates List</a>
             <!-- <a href="addCandidate.html" class="nav-link">Add Candidate</a> -->
@@ -162,7 +46,7 @@ height: 40px;
         <div class="panelType">Recruiter Panel</div>
 
         <div class="nav-links">
-                <a href="newTask.html" class="nav-link">New Events</a>
+            <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="candidateList.html" class="nav-link">Candidates List</a>
@@ -178,7 +62,7 @@ height: 40px;
         <div class="panelType">Manager Panel</div>
 
         <div class="nav-links">
-                <a href="newTask.html" class="nav-link">New Events</a>
+            <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="candidateList.html" class="nav-link">Candidates List</a>
@@ -278,11 +162,11 @@ height: 40px;
                         messageDiv.innerText = data.message;
                     }
                     messageDiv.style.display = 'block';
-                     // Page reload ko rokne ke liye
-        window.onbeforeunload = () => {
-            return false;
-        };
-                    
+                    // Page reload ko rokne ke liye
+                    window.onbeforeunload = () => {
+                        return false;
+                    };
+
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -291,7 +175,7 @@ height: 40px;
                     messageDiv.innerText = 'An error occurred. Please try again later.';
                     messageDiv.style.display = 'block';
                 });
-            
+
         }
     </script>
     <div class="bodyTag">
@@ -338,7 +222,7 @@ height: 40px;
 
                 <!-- Other Skills -->
                 <label for="otherSkills">Other Skills:</label>
-                <input type="text" id="otherSkills" name="otherSkills" required><br>
+                <textarea id="otherSkills" name="otherSkills" required></textarea><br>
 
                 <!-- Remark -->
                 <label for="remark">Remark:</label>
@@ -364,8 +248,9 @@ height: 40px;
                 </select><br>
 
                 <!-- Detailed Remark -->
-                <label for="detailedRemark">Detailed Remark:</label>
-                <input type="text" id="detailedRemark" name="detailedRemark" required><br>
+                <label for="detailedRemark">Detailed Remark:</label><br>
+                <textarea id="detailedRemark" name="detailedRemark" required></textarea><br>
+
 
                 <!-- Next Callback -->
                 <label for="nextCallback">Next Callback:</label>
