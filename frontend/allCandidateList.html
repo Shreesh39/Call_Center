@@ -93,16 +93,21 @@
             border-radius: 8px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             z-index: 999;
+            max-width: 80%;
         }
 
         .modal h2 {
             margin-bottom: 10px;
+            color: #333;
         }
 
-        .modal input {
-            width: calc(100% - 20px);
+        .modal input,
+        .modal select {
+            width: 98%;
             margin-bottom: 10px;
             padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
 
         .modal button {
@@ -118,7 +123,6 @@
         .modal button:hover {
             background-color: #0056b3;
         }
-        
     </style>
 </head>
 
@@ -134,7 +138,7 @@
             <a href="newTask.html" class="nav-link">Events</a>
             <a href="addUser.html" class="nav-link">Add User</a>
             <a href="userList.html" class="nav-link">User List</a>
-            
+
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="allCandidateList.html" class="nav-link">Candidates List</a>
             <!-- <a href="addCandidate.html" class="nav-link">Add Candidate</a> -->
@@ -150,7 +154,7 @@
         <div class="panelType">Recruiter Panel</div>
 
         <div class="nav-links">
-                <a href="newTask.html" class="nav-link">New Events</a>
+            <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="candidateList.html" class="nav-link">Candidates List</a>
@@ -166,7 +170,7 @@
         <div class="panelType">Manager Panel</div>
 
         <div class="nav-links">
-                <a href="newTask.html" class="nav-link">New Events</a>
+            <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="candidateList.html" class="nav-link">Candidates List</a>
@@ -268,58 +272,76 @@
         <!-- Edit Modal -->
         <div class="modal" id="editModal">
             <h2>Edit Candidate</h2>
-            <form id="editForm">
-                <label for="qualification">Qualification:</label>
-                <input type="text" id="qualification" name="qualification" required><br>
+            <form id="editForm" class="styled-form">
+                <div class="form-group">
+                    <label for="qualification">Qualification:</label>
+                    <input type="text" id="qualification" name="qualification" required>
+                </div>
 
-                <label for="candidateName">Candidate Name:</label>
-                <input type="text" id="candidateName" name="candidateName" required><br>
+                <div class="form-group">
+                    <label for="candidateName">Candidate Name:</label>
+                    <input type="text" id="candidateName" name="candidateName" required>
+                </div>
 
-                <label for="phoneNumber">Phone Number:</label>
-                <input type="text" id="phoneNumber" name="phoneNumber" required><br>
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number:</label>
+                    <input type="text" id="phoneNumber" name="phoneNumber" required>
+                </div>
 
-                <label for="experience">Experience:</label>
-                <input type="text" id="experience" name="experience" required><br>
+                <div class="form-group">
+                    <label for="experience">Experience:</label>
+                    <input type="text" id="experience" name="experience" required>
+                </div>
 
-                <label for="computerSkills">Computer Skills:</label>
-                <select id="computerSkills" name="computerSkills">
-                    <option value="Introduction level">Introduction level</option>
-                    <option value="Basic level">Basic level</option>
-                    <option value="Intermediate level">Intermediate level</option>
-                    <option value="Can work easily">Can work easily</option>
-                </select><br>
+                <div class="form-group">
+                    <label for="computerSkills">Computer Skills:</label>
+                    <select id="computerSkills" name="computerSkills">
+                        <option value="Introduction level">Introduction level</option>
+                        <option value="Basic level">Basic level</option>
+                        <option value="Intermediate level">Intermediate level</option>
+                        <option value="Can work easily">Can work easily</option>
+                    </select>
+                </div>
 
-                <label for="englishSkills">English Skills:</label>
-                <select id="englishSkills" name="englishSkills">
-                    <option value="Introduction level">Introduction level</option>
-                    <option value="Basic level">Basic level</option>
-                    <option value="Intermediate level">Intermediate level</option>
-                    <option value="Can work easily">Can work easily</option>
-                </select><br>
+                <div class="form-group">
+                    <label for="englishSkills">English Skills:</label>
+                    <select id="englishSkills" name="englishSkills">
+                        <option value="Introduction level">Introduction level</option>
+                        <option value="Basic level">Basic level</option>
+                        <option value="Intermediate level">Intermediate level</option>
+                        <option value="Can work easily">Can work easily</option>
+                    </select>
+                </div>
 
-                <label for="otherSkills">Other Skills:</label>
-                <input type="text" id="otherSkills" name="otherSkills" required><br>
+                <div class="form-group">
+                    <label for="otherSkills">Other Skills:</label>
+                    <input type="text" id="otherSkills" name="otherSkills" required>
+                </div>
 
-                <label for="remark">Remark:</label>
-                <select id="remark" name="remark">
-                    <option value="Selected">Selected</option>
-                    <option value="Rejected">Rejected</option>
-                    <option value="Under Process">Under Process</option>
-                </select><br>
+                <div class="form-group">
+                    <label for="remark">Remark:</label>
+                    <select id="remark" name="remark">
+                        <option value="Selected">Selected</option>
+                        <option value="Rejected">Rejected</option>
+                        <option value="Under Process">Under Process</option>
+                    </select>
+                </div>
 
-                <label for="category">Category:</label>
-                <select id="category" name="category">
-                    <option value="Software Development">Software Development</option>
-                    <option value="Sales">Sales</option>
-                    <option value="Calling International">Calling International</option>
-                    <option value="Calling Domestic">Calling Domestic</option>
-                    <option value="Housekeeping">Housekeeping</option>
-                    <option value="Day Clerical">Day Clerical</option>
-                    <option value="Marketing">Marketing</option>
-                    <option value="Internet Marketing">Internet Marketing</option>
-                    <option value="Graphic Design">Graphic Design</option>
-                    <option value="Other">Other</option>
-                </select><br>
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <select id="category" name="category">
+                        <option value="Software Development">Software Development</option>
+                        <option value="Sales">Sales</option>
+                        <option value="Calling International">Calling International</option>
+                        <option value="Calling Domestic">Calling Domestic</option>
+                        <option value="Housekeeping">Housekeeping</option>
+                        <option value="Day Clerical">Day Clerical</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Internet Marketing">Internet Marketing</option>
+                        <option value="Graphic Design">Graphic Design</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
 
                 <button type="submit">Save Changes</button>
             </form>
