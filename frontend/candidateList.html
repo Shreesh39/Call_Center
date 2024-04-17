@@ -118,6 +118,67 @@
         .modal button:hover {
             background-color: #0056b3;
         }
+       /* CSS for action buttons */
+.editButton {
+    padding: 8px 16px;
+    background-color: #4285f4; /* Blue color */
+    color: #fff;
+    font-weight: bold; /* Make text bold */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.editButton:hover {
+    background-color: #3366cc; /* Slightly darker blue color on hover */
+}
+
+.deleteButton {
+    padding: 8px 16px;
+    background-color: #ea4335; /* Red color */
+    color: #fff;
+    font-weight: bold; /* Make text bold */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.deleteButton:hover {
+    background-color: #cc3333; /* Slightly darker red color on hover */
+}
+
+.downloadButton {
+    padding: 8px 16px;
+    background-color: #34a853; /* Green color */
+    color: #fff;
+    font-weight: bold; /* Make text bold */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.downloadButton:hover {
+    background-color: #2b8a3e; /* Slightly darker green color on hover */
+}
+
+.viewButton {
+    padding: 8px 16px;
+    background-color: #fbbc05; /* Yellow color */
+    color: #fff;
+    font-weight: bold; /* Make text bold */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.viewButton:hover {
+    background-color: #e6a200; /* Slightly darker yellow color on hover */
+}
+
     </style>
 </head>
 
@@ -390,7 +451,7 @@
                                 <button class="editButton" data-id="${id}">Edit</button>
                                 <button class="deleteButton" data-id="${id}">Delete</button>
                                 <button onclick="downloadResume('${resume}')" class="downloadButton">Resume</button>
-                                <button onclick="navigateToCandidateDetail('${id}')" class="downloadButton">View Candidate</button>
+                                <button onclick="navigateToCandidateDetail('${id}')" class="viewButton">View Candidate</button>
 
                             </td>
                         </tr>
