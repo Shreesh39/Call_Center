@@ -15,7 +15,6 @@
     <style>
 
 
-
     </style>
 </head>
 
@@ -28,12 +27,12 @@
         </div>
         <div class="panelType">Admin Panel</div>
         <div class="nav-links">
-            <a href="myTask.html" class="nav-link">My Events</a>
+            <a href="myTask.html" class="nav-link" >My Events</a>
             <a href="newTask.html" class="nav-link">Events</a>
             <a href="addUser.html" class="nav-link">Add User</a>
             <a href="userList.html" class="nav-link">User List</a>
 
-            <a href="addCandidate.html" class="nav-link">Add Candidate</a>
+            <a href="addCandidate.html" class="nav-link" style="background-color: #507ca8;">Add Candidate</a>
             <a href="allCandidateList.html" class="nav-link">Candidates List</a>
             <a href="profile.html" class="nav-link profile-icon">
                 <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
@@ -53,7 +52,7 @@
         <div class="nav-links">
             <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
-            <a href="addCandidate.html" class="nav-link">Add Candidate</a>
+            <a href="addCandidate.html" class="nav-link" style="background-color: #507ca8;" >Add Candidate</a>
             <a href="candidateList.html" class="nav-link">Candidates List</a>
             <a href="profile.html" class="nav-link profile-icon">
                 <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
@@ -72,7 +71,7 @@
         <div class="nav-links">
             <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
-            <a href="addCandidate.html" class="nav-link">Add Candidate</a>
+            <a href="addCandidate.html" class="nav-link" style="background-color: #507ca8;">Add Candidate</a>
             <a href="candidateList.html" class="nav-link">Candidates List</a>
             <a href="profile.html" class="nav-link profile-icon">
                 <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
@@ -357,6 +356,21 @@
             }
         });
     </script>
+    <script>
+        const phoneNumberInput = document.getElementById('phoneNumber');
+    
+        phoneNumberInput.addEventListener('input', function() {
+            // Remove any non-numeric characters from the input value
+            this.value = this.value.replace(/\D/g, '');
+    
+            // Check if the input value exceeds 10 characters
+            if (this.value.length > 10) {
+                // If it does, truncate it to 10 characters
+                this.value = this.value.slice(0, 10);
+            }
+        });
+    </script>
+    
 </body>
 
 </html>
