@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <title>User List</title>
     <style>
@@ -186,6 +187,9 @@
             
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="allCandidateList.html" class="nav-link">Candidates List</a>
+            <a href="profile.html" class="nav-link profile-icon">
+                <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
+            </a>
             <!-- <a href="addCandidate.html" class="nav-link">Add Candidate</a> -->
             <button class="logout-btn">Logout</button>
         </div>
@@ -203,6 +207,9 @@
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <a href="profile.html" class="nav-link profile-icon">
+                <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
+            </a>
             <button class="logout-btn2">Logout</button>
         </div>
     </nav>
@@ -219,6 +226,9 @@
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <a href="profile.html" class="nav-link profile-icon">
+                <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
+            </a>
             <button class="logout-btn3">Logout</button>
         </div>
     </nav>
@@ -342,7 +352,7 @@
 
                     <label for="role">Role:</label>
                     <select id="role" name="role">
-                        <option value="admin">Admin</option>
+                        <!-- <option value="admin">Admin</option> -->
                         <option value="recruiter">Recruiter</option>
                         <option value="manager">Manager</option>
                     </select><br>
@@ -373,29 +383,33 @@
         }
 
         function renderUsers(users) {
-            const userDataContainer = document.getElementById('userData');
-            let tableRows = '';
+    const userDataContainer = document.getElementById('userData');
+    let tableRows = '';
 
-            users.forEach(user => {
-                tableRows += `
-                    <tr>
-                        <td>${user.first_name}</td>
-                        <td>${user.last_name}</td>
-                        <td>${user.address}</td>
-                        <td>${user.phone_number}</td>
-                        <td>${user.email}</td>
-                        <td>${user.role}</td>
-                        <td>${user.id}</td>
-                        <td>
-                            <button class="editButton" onclick="openEditModal('${user.id}')">Edit</button>
-                            <button class="deleteButton" onclick="confirmDelete('${user.id}')">Delete</button>
-                        </td>
-                    </tr>
-                `;
-            });
-
-            userDataContainer.innerHTML = tableRows;
+    users.forEach(user => {
+        // Only render the user if their role is not 'admin'
+        if (user.role !== 'admin') {
+            tableRows += `
+                <tr>
+                    <td>${user.first_name}</td>
+                    <td>${user.last_name}</td>
+                    <td>${user.address}</td>
+                    <td>${user.phone_number}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role}</td>
+                    <td>${user.id}</td>
+                    <td>
+                        <button class="editButton" onclick="openEditModal('${user.id}')">Edit</button>
+                        <button class="deleteButton" onclick="confirmDelete('${user.id}')">Delete</button>
+                    </td>
+                </tr>
+            `;
         }
+    });
+
+    userDataContainer.innerHTML = tableRows;
+}
+
 
         async function openEditModal(userId) {
             try {
