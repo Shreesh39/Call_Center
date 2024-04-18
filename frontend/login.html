@@ -315,6 +315,7 @@
                 const userRole = data.data.user.role;
 
                 localStorage.setItem("token", JSON.stringify(token))
+                localStorage.setItem("role", JSON.stringify(userRole))
                 console.log(userRole, "tokennnnnn")
                 showSnackbar(msg);
 

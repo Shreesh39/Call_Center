@@ -189,13 +189,15 @@ const getMyCandidateList = catchAsync(async (req, res) => {
   const currentUser = req.user;
   const perPage = 9; //  Number of documents to display on each page
   const page = req.query.page ? parseInt(req.query.page, 10) : 1; // It specify the selected page number
-
+  console.log(currentUser, "currentUser");
   let query = { recruiterId: mongoose.Types.ObjectId(currentUser) };
   if (recruiterName) {
+    console.log("hawwwwwwwwwwwwwwwwwwww");
     query = { recruiterId: recruiterName };
   }
 
   if (searchName) {
+    console.log("hawwwwwwwwwwwwwwwwwwww222222222222222222");
     const searchValue = new RegExp(searchName, "i");
     query.$or = [{ title: searchValue }, { author: searchValue }];
   } // You can search candidate through title or author

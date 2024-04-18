@@ -343,12 +343,22 @@
 
                     const snackbar = document.getElementById('snackbar');
                     snackbar.textContent = responseData.message;
+                    const stat = responseData.status;
                     snackbar.style.display = 'block';
-
+                    const currentRole = localStorage.getItem("role")
+                    console.log({ currentRole, stat });
                     setTimeout(() => {
                         snackbar.style.display = 'none';
                         // Redirect to allCandidateList.html after successful candidate addition
-                        window.location.href = 'allCandidateList.html';
+
+                        if (stat == 200) {
+                            if (currentRole == "admin") {
+                                window.location.href = 'allCandidateList.html';
+                            } else {
+                                window.location.href = 'candidateList.html';
+
+                            }
+                        }
                     }, 3000);
 
                 } catch (error) {
