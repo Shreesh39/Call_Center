@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./style.css">
 
     <title>Add User</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <style>
         .bodyTag {
@@ -118,6 +119,9 @@
                 opacity: 0;
             }
         }
+        .fa-eye:before{
+            padding: 378px;
+        }
     </style>
 </head>
 
@@ -132,7 +136,7 @@
         <div class="nav-links">
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="newTask.html" class="nav-link">Events</a>
-            <a href="addUser.html" class="nav-link">Add User</a>
+            <a href="addUser.html" class="nav-link" style="background-color: #507ca8;">Add User</a>
             <a href="userList.html" class="nav-link">User List</a>
             
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
@@ -272,6 +276,9 @@
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input id="password" type="password" required maxlength="99" />
+                    <span class="password-toggle-icon">
+                        <i class="fas fa-eye" id="togglePassword"></i>
+                    </span>
                     <p class="error-text" id="passwordError"></p>
                 </div>
 
@@ -338,6 +345,21 @@
             }, 3000); // Adjust the time the snackbar is displayed (in milliseconds)
         }
     </script>
+    <script>
+        const phoneNumberInput = document.getElementById('phone_number');
+    
+        phoneNumberInput.addEventListener('input', function() {
+            // Remove any non-numeric characters from the input value
+            this.value = this.value.replace(/\D/g, '');
+    
+            // Check if the input value exceeds 10 characters
+            if (this.value.length > 10) {
+                // If it does, truncate it to 10 characters
+                this.value = this.value.slice(0, 10);
+            }
+        });
+    </script>
+    
 </body>
 
 </html>

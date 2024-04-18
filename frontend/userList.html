@@ -92,49 +92,37 @@
         }
 
         .modal {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    z-index: 999;
-    width: 80%; /* Adjust the width as needed */
-    max-width: 400px; /* Limit the maximum width */
-}
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+        }
 
-.modal input[type="text"],
-.modal input[type="email"],
-.modal select {
-    width: calc(100% - 20px);
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
+        .modal input {
+            width: calc(100% - 20px);
+            margin-bottom: 10px;
+            padding: 8px;
+        }
 
-.modal label {
-    display: block;
-    margin-bottom: 8px;
-}
+        .modal button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-.modal button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    width: 100%;
-}
-
-.modal button:hover {
-    background-color: #0056b3;
-}
+        .modal button:hover {
+            background-color: #0056b3;
+        }
         /* CSS for action buttons */
 .editButton {
     padding: 8px 16px;
@@ -166,7 +154,6 @@
     background-color: #c82333; /* Darker red color on hover */
 }
 
-
     </style>
 </head>
 
@@ -182,7 +169,7 @@
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="newTask.html" class="nav-link">Events</a>
             <a href="addUser.html" class="nav-link">Add User</a>
-            <a href="userList.html" class="nav-link">User List</a>
+            <a href="userList.html" class="nav-link" style="background-color: #507ca8;">User List</a>
             
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="allCandidateList.html" class="nav-link">Candidates List</a>
@@ -373,29 +360,35 @@
         }
 
         function renderUsers(users) {
-            const userDataContainer = document.getElementById('userData');
-            let tableRows = '';
+    const userDataContainer = document.getElementById('userData');
+    let tableRows = '';
 
-            users.forEach(user => {
-                tableRows += `
-                    <tr>
-                        <td>${user.first_name}</td>
-                        <td>${user.last_name}</td>
-                        <td>${user.address}</td>
-                        <td>${user.phone_number}</td>
-                        <td>${user.email}</td>
-                        <td>${user.role}</td>
-                        <td>${user.id}</td>
-                        <td>
-                            <button class="editButton" onclick="openEditModal('${user.id}')">Edit</button>
-                            <button class="deleteButton" onclick="confirmDelete('${user.id}')">Delete</button>
-                        </td>
-                    </tr>
-                `;
-            });
+    users.forEach(user => {
+        const capitalizedRole = capitalizeFirstLetter(user.role); // Capitalize the role name
+        tableRows += `
+            <tr>
+                <td>${user.first_name}</td>
+                <td>${user.last_name}</td>
+                <td>${user.address}</td>
+                <td>${user.phone_number}</td>
+                <td>${user.email}</td>
+                <td>${capitalizedRole}</td> <!-- Display capitalized role -->
+                <td>${user.id}</td>
+                <td>
+                    <button class="editButton" onclick="openEditModal('${user.id}')">Edit</button>
+                    <button class="deleteButton" onclick="confirmDelete('${user.id}')">Delete</button>
+                </td>
+            </tr>
+        `;
+    });
 
-            userDataContainer.innerHTML = tableRows;
-        }
+    userDataContainer.innerHTML = tableRows;
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 
         async function openEditModal(userId) {
             try {
