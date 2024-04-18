@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 
     <title>Candidate List</title>
     <style>
@@ -93,16 +95,21 @@
             border-radius: 8px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             z-index: 999;
+            max-width: 80%;
         }
 
         .modal h2 {
             margin-bottom: 10px;
+            color: #333;
         }
 
-        .modal input {
-            width: calc(100% - 20px);
+        .modal input,
+        .modal select {
+            width: 98%;
             margin-bottom: 10px;
             padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
 
         .modal button {
@@ -118,6 +125,68 @@
         .modal button:hover {
             background-color: #0056b3;
         }
+       /* CSS for action buttons */
+.editButton {
+    padding: 8px 16px;
+    background-color: #4285f4; /* Blue color */
+    color: #fff;
+    font-weight: bold; /* Make text bold */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.editButton:hover {
+    background-color: #3366cc; /* Slightly darker blue color on hover */
+}
+
+.deleteButton {
+    padding: 8px 16px;
+    background-color: #ea4335; /* Red color */
+    color: #fff;
+    font-weight: bold; /* Make text bold */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.deleteButton:hover {
+    background-color: #cc3333; /* Slightly darker red color on hover */
+}
+
+.downloadButton {
+    padding: 8px 16px;
+    background-color: #34a853; /* Green color */
+    color: #fff;
+    font-weight: bold; /* Make text bold */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.downloadButton:hover {
+    background-color: #2b8a3e; /* Slightly darker green color on hover */
+}
+
+.viewButton {
+    padding: 8px 16px;
+    background-color: #fbbc05; /* Yellow color */
+    color: #fff;
+    font-weight: bold; /* Make text bold */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.viewButton:hover {
+    background-color: #e6a200; /* Slightly darker yellow color on hover */
+}
+
+        
     </style>
 </head>
 
@@ -136,6 +205,9 @@
             
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="allCandidateList.html" class="nav-link">Candidates List</a>
+            <a href="profile.html" class="nav-link profile-icon">
+                <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
+            </a>
             <!-- <a href="addCandidate.html" class="nav-link">Add Candidate</a> -->
             <button class="logout-btn">Logout</button>
         </div>
@@ -152,7 +224,10 @@
                 <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
-            <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <a href="candidateList.html" class="nav-link" style="background-color: #507ca8;">Candidates List</a>
+            <a href="profile.html" class="nav-link profile-icon">
+                <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
+            </a>
             <button class="logout-btn2">Logout</button>
         </div>
     </nav>
@@ -168,7 +243,10 @@
                 <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
-            <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <a href="candidateList.html" class="nav-link" style="background-color: #507ca8;">Candidates List</a>
+            <a href="profile.html" class="nav-link profile-icon">
+                <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
+            </a>
             <button class="logout-btn3">Logout</button>
         </div>
     </nav>
@@ -267,62 +345,81 @@
         <!-- Edit Modal -->
         <div class="modal" id="editModal">
             <h2>Edit Candidate</h2>
-            <form id="editForm">
-                <label for="qualification">Qualification:</label>
-                <input type="text" id="qualification" name="qualification" required><br>
-
-                <label for="candidateName">Candidate Name:</label>
-                <input type="text" id="candidateName" name="candidateName" required><br>
-
-                <label for="phoneNumber">Phone Number:</label>
-                <input type="text" id="phoneNumber" name="phoneNumber" required><br>
-
-                <label for="experience">Experience:</label>
-                <input type="text" id="experience" name="experience" required><br>
-
-                <label for="computerSkills">Computer Skills:</label>
-                <select id="computerSkills" name="computerSkills">
-                    <option value="Introduction level">Introduction level</option>
-                    <option value="Basic level">Basic level</option>
-                    <option value="Intermediate level">Intermediate level</option>
-                    <option value="Can work easily">Can work easily</option>
-                </select><br>
-
-                <label for="englishSkills">English Skills:</label>
-                <select id="englishSkills" name="englishSkills">
-                    <option value="Introduction level">Introduction level</option>
-                    <option value="Basic level">Basic level</option>
-                    <option value="Intermediate level">Intermediate level</option>
-                    <option value="Can work easily">Can work easily</option>
-                </select><br>
-
-                <label for="otherSkills">Other Skills:</label>
-                <input type="text" id="otherSkills" name="otherSkills" required><br>
-
-                <label for="remark">Remark:</label>
-                <select id="remark" name="remark">
-                    <option value="Selected">Selected</option>
-                    <option value="Rejected">Rejected</option>
-                    <option value="Under Process">Under Process</option>
-                </select><br>
-
-                <label for="category">Category:</label>
-                <select id="category" name="category">
-                    <option value="Software Development">Software Development</option>
-                    <option value="Sales">Sales</option>
-                    <option value="Calling International">Calling International</option>
-                    <option value="Calling Domestic">Calling Domestic</option>
-                    <option value="Housekeeping">Housekeeping</option>
-                    <option value="Day Clerical">Day Clerical</option>
-                    <option value="Marketing">Marketing</option>
-                    <option value="Internet Marketing">Internet Marketing</option>
-                    <option value="Graphic Design">Graphic Design</option>
-                    <option value="Other">Other</option>
-                </select><br>
-
+            <form id="editForm" class="styled-form">
+                <div class="form-group">
+                    <label for="qualification">Qualification:</label>
+                    <input type="text" id="qualification" name="qualification" required>
+                </div>
+        
+                <div class="form-group">
+                    <label for="candidateName">Candidate Name:</label>
+                    <input type="text" id="candidateName" name="candidateName" required>
+                </div>
+        
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number:</label>
+                    <input type="text" id="phoneNumber" name="phoneNumber" required>
+                </div>
+        
+                <div class="form-group">
+                    <label for="experience">Experience:</label>
+                    <input type="text" id="experience" name="experience" required>
+                </div>
+        
+                <div class="form-group">
+                    <label for="computerSkills">Computer Skills:</label>
+                    <select id="computerSkills" name="computerSkills">
+                        <option value="Introduction level">Introduction level</option>
+                        <option value="Basic level">Basic level</option>
+                        <option value="Intermediate level">Intermediate level</option>
+                        <option value="Can work easily">Can work easily</option>
+                    </select>
+                </div>
+        
+                <div class="form-group">
+                    <label for="englishSkills">English Skills:</label>
+                    <select id="englishSkills" name="englishSkills">
+                        <option value="Introduction level">Introduction level</option>
+                        <option value="Basic level">Basic level</option>
+                        <option value="Intermediate level">Intermediate level</option>
+                        <option value="Can work easily">Can work easily</option>
+                    </select>
+                </div>
+        
+                <div class="form-group">
+                    <label for="otherSkills">Other Skills:</label>
+                    <input type="text" id="otherSkills" name="otherSkills" required>
+                </div>
+        
+                <div class="form-group">
+                    <label for="remark">Remark:</label>
+                    <select id="remark" name="remark">
+                        <option value="Selected">Selected</option>
+                        <option value="Rejected">Rejected</option>
+                        <option value="Under Process">Under Process</option>
+                    </select>
+                </div>
+        
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <select id="category" name="category">
+                        <option value="Software Development">Software Development</option>
+                        <option value="Sales">Sales</option>
+                        <option value="Calling International">Calling International</option>
+                        <option value="Calling Domestic">Calling Domestic</option>
+                        <option value="Housekeeping">Housekeeping</option>
+                        <option value="Day Clerical">Day Clerical</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Internet Marketing">Internet Marketing</option>
+                        <option value="Graphic Design">Graphic Design</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+        
                 <button type="submit">Save Changes</button>
             </form>
         </div>
+        
 
     </div>
 
@@ -390,7 +487,7 @@
                                 <button class="editButton" data-id="${id}">Edit</button>
                                 <button class="deleteButton" data-id="${id}">Delete</button>
                                 <button onclick="downloadResume('${resume}')" class="downloadButton">Resume</button>
-                                <button onclick="navigateToCandidateDetail('${id}')" class="downloadButton">View Candidate</button>
+                                <button onclick="navigateToCandidateDetail('${id}')" class="viewButton">View Candidate</button>
 
                             </td>
                         </tr>

@@ -9,4 +9,4 @@ yarn-error.log
 
 # Code coverage
 coverage
-src/uploads
+uploads

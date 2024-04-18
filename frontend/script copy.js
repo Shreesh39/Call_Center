@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-    logoutBtn.addEventListener("click", () => {
+  logoutBtn.addEventListener("click", () => {
     const isConfirmed = window.confirm("Are you sure you want to log out?");
     if (isConfirmed) {
       localStorage.removeItem("token");

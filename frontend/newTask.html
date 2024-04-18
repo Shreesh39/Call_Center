@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <link rel="stylesheet" href="./style.css">
 
@@ -52,41 +53,71 @@
             padding: 8px 16px;
         }
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
+         /* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
 
-        .modal-content {
-            background-color: #ffffff;
-            border-radius: 8px;
-            margin: 15% auto;
-            padding: 20px;
-            width: 70%;
-        }
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 10px;
+    width: 60%; /* Adjusted width */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
 
-        .close {
-            color: #aaaaaa;
-            cursor: pointer;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
 
-        .close:hover,
-        .close:focus {
-            color: #000000;
-            text-decoration: none;
-            cursor: pointer;
-        }
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.modal textarea {
+    width: calc(100% - 20px); /* Adjust width as needed */
+    height: 80px;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical; /* Allow vertical resizing */
+}
 
+
+/* Adjust input field */
+#newRemark {
+    margin-bottom: 20px; /* Increased bottom margin */
+    padding: 12px; /* Increased padding */
+    width: calc(100% - 40px); /* Adjusted width */
+}
+
+/* Position submit button */
+.modal-content button {
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 10px 20px; /* Adjusted padding */
+    margin: 0 auto; /* Centered horizontally */
+    display: block; /* Displayed as block to take full width */
+}
         #newRemark {
             margin-bottom: 10px;
             padding: 8px;
@@ -105,13 +136,17 @@
         </div>
         <div class="panelType">Admin Panel</div>
         <div class="nav-links">
-            <a href="newTask.html" class="nav-link">Events</a>
+            <a href="myTask.html" class="nav-link">My Events</a>
+            <a href="newTask.html" class="nav-link" style="background-color: #507ca8;">Events</a>
             <a href="addUser.html" class="nav-link">Add User</a>
             <a href="userList.html" class="nav-link">User List</a>
             
             
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="allCandidateList.html" class="nav-link">Candidates List</a>
+            <a href="profile.html" class="nav-link profile-icon">
+                <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
+            </a>
             <!-- <a href="addCandidate.html" class="nav-link">Add Candidate</a> -->
             <button class="logout-btn">Logout</button>
         </div>
@@ -125,10 +160,13 @@
         <div class="panelType">Recruiter Panel</div>
 
         <div class="nav-links">
-                <a href="newTask.html" class="nav-link">New Events</a>
+                <a href="newTask.html" class="nav-link" style="background-color: #507ca8;">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <a href="profile.html" class="nav-link profile-icon">
+                <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
+            </a>
             <button class="logout-btn2">Logout</button>
         </div>
     </nav>
@@ -141,10 +179,13 @@
         <div class="panelType">Manager Panel</div>
 
         <div class="nav-links">
-                <a href="newTask.html" class="nav-link">New Events</a>
+                <a href="newTask.html" class="nav-link" style="background-color: #507ca8;">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <a href="profile.html" class="nav-link profile-icon">
+                <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
+            </a>
             <button class="logout-btn3">Logout</button>
         </div>
     </nav>
@@ -161,6 +202,7 @@
         </div>
     </nav>
 
+    <h1 style="text-align: center; margin-top: 20px; color: #007bff;">Events For Me</h1>
 
     <script src="script.js"></script>
     <script>
@@ -213,15 +255,14 @@
         <!-- Tasks will be added here dynamically -->
     </div>
 
-    <!-- Modal -->
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <input type="text" id="newRemark" placeholder="Enter new remark">
-            <button onclick="submitRemark(event)">Submit Remark</button>
-        </div>
+   <!-- Modal -->
+   <div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <textarea id="newRemark" placeholder="Enter new remark" rows="4"></textarea>
+        <button onclick="submitRemark(event)">Submit Remark</button>
     </div>
-
+</div>
     <script>
         // Fetch data from the API and create cards for each task
 
@@ -315,10 +356,13 @@
                     // Close modal after submitting remark
                     document.getElementById('myModal').style.display = "none";
                     // Reload page to reflect changes
-                    // location.reload();
+                    location.reload();
+                    
                 })
                 .catch(error => console.error('Error:', error));
         }
+
+
     </script>
 
 </body>

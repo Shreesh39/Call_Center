@@ -13,6 +13,11 @@ const candidateSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     candidateName: {
       type: String,
       required: true,

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.profile-section {
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.profile-info {
+    margin-bottom: 15px;
+}
+
+.profile-info label {
+    font-weight: bold;
+    color: #555;
+    text-transform: uppercase;
+}
+
+.profile-info p {
+    margin: 0;
+    color: #333;
+}
+
+/* Alternating section colors */
+.odd-section {
+    background-color: #f9f9f9;
+}
+
+.even-section {
+    background-color: #e6e6e6;
+}
+
+/* nav bar styles */
+.navbar {
+    background-color: #3498db;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.logo img {
+    width: 50px;
+    height: auto;
+    border-radius: 50%;
+}
+
+.panelType {
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+}
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    margin-right: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.logout-btn {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.logout-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Style for different panel types */
+.hr-navbar .panelType {
+    background-color: #27ae60;
+}
+
+.manager-navbar .panelType {
+    background-color: #f39c12;
+}
+
+    </style>
+</head>
+<body>
+    <nav class="admin-navbar navbar">
+        <!-- Your admin navbar content here -->
+        <div class="logo">
+            <img src="./HRM.jpg" alt="Admin Logo">
+        </div>
+        <div class="panelType">Admin Panel</div>
+        <div class="nav-links">
+            <a href="myTask.html" class="nav-link">My Events</a>
+            <a href="newTask.html" class="nav-link">Events</a>
+            <a href="myTask.html" class="nav-link">My Events</a>
+
+            <a href="addUser.html" class="nav-link">Add User</a>
+            <a href="userList.html" class="nav-link">User List</a>
+
+            <a href="addCandidate.html" class="nav-link">Add Candidate</a>
+            <a href="allCandidateList.html" class="nav-link">Candidates List</a>
+            <a href="profile.html" class="nav-link profile-icon">
+                <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
+            </a>
+            <!-- <a href="addCandidate.html" class="nav-link">Add Candidate</a> -->
+            <button class="logout-btn">Logout</button>
+        </div>
+    </nav>
+
+    
+
+    
+    <div class="container">
+        <h1>My Profile</h1>
+        <div class="profile-section odd-section">
+            <div class="profile-info">
+                <label>First Name:</label>
+                <p id="first_name"></p>
+            </div>
+            <div class="profile-info">
+                <label>Last Name:</label>
+                <p id="last_name"></p>
+            </div>
+            <div class="profile-info">
+                <label>Email:</label>
+                <p id="email"></p>
+            </div>
+        </div>
+        <div class="profile-section even-section">
+            <div class="profile-info">
+                <label>Address:</label>
+                <p id="address"></p>
+            </div>
+            <div class="profile-info">
+                <label>Phone Number:</label>
+                <p id="phone_number"></p>
+            </div>
+        </div>
+        <div class="profile-section odd-section">
+            <div class="profile-info">
+                <label>Role:</label>
+                <p id="role"></p>
+            </div>
+            <div class="profile-info">
+                <label>ID:</label>
+                <p id="id"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript to fetch and display profile data -->
+    <script>
+         const token = localStorage.getItem('token');
+        const adminNavbar = document.querySelector('.admin-navbar');
+        const regularNavbar = document.querySelector('.regular-navbar');
+        const hrNavbar = document.querySelector('.hr-navbar');
+        const managerNavbar = document.querySelector('.manager-navbar');
+
+        if (token) {
+            fetchUserData(); // Call the function to fetch user data
+        } else {
+            // Show regular navbar if no token found
+            regularNavbar.style.display = 'flex';
+        }
+
+        async function fetchUserData() {
+            const requestOptions = {
+                method: 'GET',
+                headers: {
+                    'Accept': '*/*',
+                    'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,
+                    'Sec-Fetch-Mode': 'cors',
+                    'Sec-Fetch-Site': 'cross-site'
+                }
+            };
+
+            try {
+                const response = await fetch('http://localhost:4004/auth/me', requestOptions);
+                const data = await response.json();
+                console.log(data); // Log the data for debugging
+                // Update HTML elements with profile data
+                document.getElementById('first_name').textContent = data.first_name;
+                document.getElementById('last_name').textContent = data.last_name;
+                document.getElementById('address').textContent = data.address;
+                document.getElementById('phone_number').textContent = data.phone_number;
+                document.getElementById('email').textContent = data.email;
+                document.getElementById('role').textContent = data.role;
+                document.getElementById('id').textContent = data.id;
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        }
+
+        // Call fetchUserData when the page loads
+        window.onload = fetchUserData;
+    </script>
+    
+</body>
+</html>

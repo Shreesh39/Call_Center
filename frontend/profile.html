@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        .bodyTag {
+            background-color: #f0f4f7;
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 90%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-section {
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .profile-info {
+            margin-bottom: 15px;
+        }
+
+        .profile-info label {
+            font-weight: bold;
+            color: #555;
+            text-transform: uppercase;
+        }
+
+        .profile-info p {
+            margin: 0;
+            color: #333;
+        }
+
+        /* Alternating section colors */
+        .odd-section {
+            background-color: #f9f9f9;
+        }
+
+        .even-section {
+            background-color: #e6e6e6;
+        }
+
+        h1 {
+            color: #007bff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            white-space: nowrap;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .select-container {
+            margin-bottom: 20px;
+        }
+
+        .select-container select {
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .button-container {
+            margin-bottom: 20px;
+        }
+
+        .button-container button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-container button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            width: 80%;
+            /* Adjust the width as needed */
+            max-width: 400px;
+            /* Limit the maximum width */
+        }
+
+        .modal input[type="text"],
+        .modal input[type="email"],
+        .modal select {
+            width: calc(100% - 20px);
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .modal label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .modal button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .modal button:hover {
+            background-color: #0056b3;
+        }
+
+        /* CSS for action buttons */
+        .editButton {
+            padding: 8px 16px;
+            background-color: #007bff;
+            /* Blue color */
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .editButton:hover {
+            background-color: #0056b3;
+            /* Darker blue color on hover */
+        }
+
+        .deleteButton {
+            padding: 8px 16px;
+            background-color: #dc3545;
+            /* Red color */
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .deleteButton:hover {
+            background-color: #c82333;
+            /* Darker red color on hover */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Admin Navbar -->
+    <nav class="admin-navbar navbar">
+        <!-- Your admin navbar content here -->
+        <div class="logo">
+            <img src="./HRM.jpg" alt="Admin Logo">
+        </div>
+        <div class="panelType">Admin Panel</div>
+        <div class="nav-links">
+            <a href="myTask.html" class="nav-link">My Events</a>
+            <a href="newTask.html" class="nav-link">Events</a>
+            <a href="addUser.html" class="nav-link">Add User</a>
+            <a href="userList.html" class="nav-link">User List</a>
+
+            <a href="addCandidate.html" class="nav-link">Add Candidate</a>
+            <a href="allCandidateList.html" class="nav-link">Candidates List</a>
+            <a href="profile.html" class="nav-link profile-icon">
+                <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
+            </a>
+            <!-- <a href="addCandidate.html" class="nav-link">Add Candidate</a> -->
+            <button class="logout-btn">Logout</button>
+        </div>
+    </nav>
+
+    <nav class="hr-navbar navbar">
+        <!-- Your admin navbar content here -->
+        <div class="logo">
+            <img src="./HRM.jpg" alt="HR Logo">
+        </div>
+        <div class="panelType">Recruiter Panel</div>
+
+        <div class="nav-links">
+            <a href="newTask.html" class="nav-link">New Events</a>
+            <a href="myTask.html" class="nav-link">My Events</a>
+            <a href="addCandidate.html" class="nav-link">Add Candidate</a>
+            <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <a href="profile.html" class="nav-link profile-icon">
+                <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
+            </a>
+            <button class="logout-btn2">Logout</button>
+        </div>
+    </nav>
+
+    <nav class="manager-navbar navbar">
+        <!-- Your admin navbar content here -->
+        <div class="logo">
+            <img src="./HRM.jpg" alt="Manager Logo">
+        </div>
+        <div class="panelType">Manager Panel</div>
+
+        <div class="nav-links">
+            <a href="newTask.html" class="nav-link">New Events</a>
+            <a href="myTask.html" class="nav-link">My Events</a>
+            <a href="addCandidate.html" class="nav-link">Add Candidate</a>
+            <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <a href="profile.html" class="nav-link profile-icon">
+                <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
+            </a>
+            <button class="logout-btn3">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Regular Navbar -->
+    <nav class="regular-navbar navbar">
+        <!-- Your regular navbar content here -->
+        <div class="logo">
+            <img src="./HRM.jpg" alt="Logo">
+        </div>
+        <div class="nav-links">
+            <a href="login.html" class="nav-link">Login</a>
+            <a href="register.html" class="nav-link">Register</a>
+        </div>
+    </nav>
+
+
+
+
+
+    <div class="container">
+        <h1>My Profile</h1>
+        <div class="profile-section odd-section">
+            <div class="profile-info">
+                <label>First Name:</label>
+                <p id="first_name"></p>
+            </div>
+            <div class="profile-info">
+                <label>Last Name:</label>
+                <p id="last_name"></p>
+            </div>
+            <div class="profile-info">
+                <label>Email:</label>
+                <p id="email"></p>
+            </div>
+        </div>
+        <div class="profile-section even-section">
+            <div class="profile-info">
+                <label>Address:</label>
+                <p id="address"></p>
+            </div>
+            <div class="profile-info">
+                <label>Phone Number:</label>
+                <p id="phone_number"></p>
+            </div>
+        </div>
+        <div class="profile-section odd-section">
+            <div class="profile-info">
+                <label>Role:</label>
+                <p id="role"></p>
+            </div>
+            <div class="profile-info">
+                <label>ID:</label>
+                <p id="id"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    <script>
+        const token = localStorage.getItem('token');
+        const adminNavbar = document.querySelector('.admin-navbar');
+        const regularNavbar = document.querySelector('.regular-navbar');
+        const hrNavbar = document.querySelector('.hr-navbar');
+        const managerNavbar = document.querySelector('.manager-navbar');
+
+        if (token) {
+            fetchUserData(); // Call the function to fetch user data
+        } else {
+            // Show regular navbar if no token found
+            regularNavbar.style.display = 'flex';
+        }
+
+        async function fetchUserData() {
+            const requestOptions = {
+                method: 'GET',
+                headers: {
+                    'Accept': '*/*',
+                    'Authorization': `Bearer ${token.replace(/^"(.*)"$/, '$1')}`,
+                    'Sec-Fetch-Mode': 'cors',
+                    'Sec-Fetch-Site': 'cross-site'
+                }
+            };
+
+            console.log("fffffffffffffffffffffffff");
+
+            try {
+                const response = await fetch('http://localhost:4004/auth/me', requestOptions);
+                const data = await response.json();
+                console.log(data, "data in loggs");
+                document.getElementById('first_name').textContent = data.first_name;
+                document.getElementById('last_name').textContent = data.last_name;
+                document.getElementById('address').textContent = data.address;
+                document.getElementById('phone_number').textContent = data.phone_number;
+                document.getElementById('email').textContent = data.email;
+                document.getElementById('role').textContent = data.role;
+                document.getElementById('id').textContent = data.id;
+                if (data.role == 'admin') {
+                    adminNavbar.style.display = 'flex'; // Show admin navbar
+                } else if (data.role == 'recruiter') {
+                    hrNavbar.style.display = 'flex'; // Show regular navbar
+                } else if (data.role == 'manager') {
+                    managerNavbar.style.display = 'flex'; // Show regular navbar
+                } else {
+                    regularNavbar.style.display = 'flex'; // Show regular navbar
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

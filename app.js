@@ -1,4 +1,4 @@
-const express = require("express");
+  const express = require("express");
 const routes = require("./routes");
 const passport = require("passport");
 const { jwtStrategy } = require("./config/passport");
@@ -22,6 +22,7 @@ app.use(passport.initialize());
 passport.use("jwt", jwtStrategy);
 
 const port = process.env.REACT_APP_PORT;
+
 app.listen(port, (req, res) => {
   console.log(`Server is listening at http://localhost:${port}`);
 });

@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <style>
@@ -129,10 +133,13 @@
         </div>
         <div class="panelType">Admin Panel</div>
         <div class="nav-links">
+            <a href="myTask.html" class="nav-link">My Events</a>
             <a href="newTask.html" class="nav-link">Events</a>
+            <a href="myTask.html" class="nav-link">My Events</a>
+
             <a href="addUser.html" class="nav-link">Add User</a>
             <a href="userList.html" class="nav-link">User List</a>
-            
+
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="allCandidateList.html" class="nav-link">Candidates List</a>
             <!-- <a href="addCandidate.html" class="nav-link">Add Candidate</a> -->
@@ -148,7 +155,7 @@
         <div class="panelType">Recruiter Panel</div>
 
         <div class="nav-links">
-                <a href="newTask.html" class="nav-link">New Events</a>
+            <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="candidateList.html" class="nav-link">Candidates List</a>
@@ -164,7 +171,7 @@
         <div class="panelType">Manager Panel</div>
 
         <div class="nav-links">
-                <a href="newTask.html" class="nav-link">New Events</a>
+            <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="candidateList.html" class="nav-link">Candidates List</a>
@@ -262,9 +269,12 @@
                     <p class="error-text" id="phoneNumberError"></p>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group passClass">
                     <label for="password">Password</label>
                     <input id="password" type="password" required maxlength="99" />
+                    <span class="password-toggle-icon">
+                        <i class="fas fa-eye" id="togglePassword"></i>
+                    </span>
                     <p class="error-text" id="passwordError"></p>
                 </div>
 
@@ -274,6 +284,7 @@
                     <p class="error-text" id="addressError"></p>
                 </div>
 
+                
 
 
                 <div class="form-group">
@@ -311,6 +322,16 @@
                     }
                 });
                 showSnackbar('User registered successfully!');
+
+
+                setTimeout(() => {
+                    if (response.data.status == 200) {
+                        window.location.href = 'login.html';
+                    }
+                }, 2000);
+
+
+
                 console.log(response.data); // Log the API response
 
             } catch (error) {
@@ -324,10 +345,36 @@
 
             setTimeout(() => {
                 snackbar.classList.remove('show');
-                window.location.href = 'login.html';
+
             }, 2000); // Adjust the time the snackbar is displayed (in milliseconds)
         }
     </script>
+    <script>
+        const phoneNumberInput = document.getElementById('phone_number');
+
+        phoneNumberInput.addEventListener('input', function () {
+            // Remove any non-numeric characters from the input value
+            this.value = this.value.replace(/\D/g, '');
+
+            // Check if the input value exceeds 10 characters
+            if (this.value.length > 10) {
+                // If it does, truncate it to 10 characters
+                this.value = this.value.slice(0, 10);
+            }
+        });
+    </script>
+    <script>
+        const passwordInput = document.getElementById('password');
+        const togglePasswordIcon = document.getElementById('togglePassword');
+
+        togglePasswordIcon.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePasswordIcon.classList.toggle('fa-eye-slash');
+        });
+    </script>
+
+
 </body>
 
 </html>

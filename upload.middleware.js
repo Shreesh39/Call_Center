@@ -5,7 +5,7 @@ const { dirname } = require("path");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const currentDir = dirname(__filename);
+    const currentDir = dirname(__filename);//
     const dir = path.join(currentDir, "./uploads");
     try {
       if (!fs.existsSync(dir)) {
