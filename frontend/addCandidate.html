@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="addcandidate.css">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <title>Add Candidate</title>
     <style>
@@ -27,7 +27,7 @@
         </div>
         <div class="panelType">Admin Panel</div>
         <div class="nav-links">
-            <a href="myTask.html" class="nav-link" >My Events</a>
+            <a href="myTask.html" class="nav-link">My Events</a>
             <a href="newTask.html" class="nav-link">Events</a>
             <a href="addUser.html" class="nav-link">Add User</a>
             <a href="userList.html" class="nav-link">User List</a>
@@ -52,7 +52,7 @@
         <div class="nav-links">
             <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
-            <a href="addCandidate.html" class="nav-link" style="background-color: #507ca8;" >Add Candidate</a>
+            <a href="addCandidate.html" class="nav-link" style="background-color: #507ca8;">Add Candidate</a>
             <a href="candidateList.html" class="nav-link">Candidates List</a>
             <a href="profile.html" class="nav-link profile-icon">
                 <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
@@ -161,7 +161,7 @@
 
                     setTimeout(() => {
                         snackbar.style.display = 'none';
-                    }, 3000);
+                    }, 6000);
                     const messageDiv = document.getElementById('message');
                     if (data.status === 200) {
                         messageDiv.className = 'message success';
@@ -201,6 +201,8 @@
 
                 <label for="candidateName">Name:</label>
                 <input type="text" id="candidateName" name="candidateName" required><br>
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email" required><br>
 
                 <label for="phoneNumber">Phone Number:</label>
                 <input type="text" id="phoneNumber" name="phoneNumber" required><br>
@@ -346,8 +348,9 @@
                     setTimeout(() => {
                         snackbar.style.display = 'none';
                         // Redirect to allCandidateList.html after successful candidate addition
-                window.location.href = 'allCandidateList.html';
+                        window.location.href = 'allCandidateList.html';
                     }, 3000);
+
                 } catch (error) {
                     console.error('Error:', error);
                 }
@@ -358,11 +361,11 @@
     </script>
     <script>
         const phoneNumberInput = document.getElementById('phoneNumber');
-    
-        phoneNumberInput.addEventListener('input', function() {
+
+        phoneNumberInput.addEventListener('input', function () {
             // Remove any non-numeric characters from the input value
             this.value = this.value.replace(/\D/g, '');
-    
+
             // Check if the input value exceeds 10 characters
             if (this.value.length > 10) {
                 // If it does, truncate it to 10 characters
@@ -370,7 +373,7 @@
             }
         });
     </script>
-    
+
 </body>
 
 </html>

@@ -7,12 +7,14 @@
     <link rel="stylesheet" href="./style.css">
 
     <title>Add User</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
-         .bodyTag {
+        .bodyTag {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -21,7 +23,8 @@
             align-items: center;
             min-height: 100vh;
             /* Add background image */
-            background-image: url("./adduser.jpg"); /* Replace "your-background-image.jpg" with the path to your image */
+            background-image: url("./adduser.jpg");
+            /* Replace "your-background-image.jpg" with the path to your image */
             background-size: cover;
             background-position: center;
         }
@@ -125,9 +128,6 @@
                 opacity: 0;
             }
         }
-        .fa-eye:before{
-            padding: 378px;
-        }
     </style>
 </head>
 
@@ -144,7 +144,7 @@
             <a href="newTask.html" class="nav-link">Events</a>
             <a href="addUser.html" class="nav-link" style="background-color: #507ca8;">Add User</a>
             <a href="userList.html" class="nav-link">User List</a>
-            
+
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="allCandidateList.html" class="nav-link">Candidates List</a>
             <a href="profile.html" class="nav-link profile-icon">
@@ -163,7 +163,7 @@
         <div class="panelType">Recruiter Panel</div>
 
         <div class="nav-links">
-                <a href="newTask.html" class="nav-link">New Events</a>
+            <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="candidateList.html" class="nav-link">Candidates List</a>
@@ -182,7 +182,7 @@
         <div class="panelType">Manager Panel</div>
 
         <div class="nav-links">
-                <a href="newTask.html" class="nav-link">New Events</a>
+            <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link">Add Candidate</a>
             <a href="candidateList.html" class="nav-link">Candidates List</a>
@@ -253,7 +253,7 @@
         }
     </script>
 
-    
+
     <div class="bodyTag">
         <div class="form-container">
             <h2 style="color: #007bff;">Add New User</h2>
@@ -290,7 +290,7 @@
                     <p class="error-text" id="phoneNumberError"></p>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group passClass">
                     <label for="password">Password</label>
                     <input id="password" type="password" required maxlength="99" />
                     <span class="password-toggle-icon">
@@ -345,9 +345,9 @@
                 });
                 showSnackbar('User registered successfully!');
                 console.log(response.data); // Log the API response
-                
-        // Redirect to userList.html after successful registration
-        window.location.href = 'userList.html';
+
+                // Redirect to userList.html after successful registration
+                window.location.href = 'userList.html';
             } catch (error) {
                 showSnackbar(error.response.data.message);
             }
@@ -364,11 +364,11 @@
     </script>
     <script>
         const phoneNumberInput = document.getElementById('phone_number');
-    
-        phoneNumberInput.addEventListener('input', function() {
+
+        phoneNumberInput.addEventListener('input', function () {
             // Remove any non-numeric characters from the input value
             this.value = this.value.replace(/\D/g, '');
-    
+
             // Check if the input value exceeds 10 characters
             if (this.value.length > 10) {
                 // If it does, truncate it to 10 characters
@@ -376,7 +376,17 @@
             }
         });
     </script>
-    
+    <script>
+        const passwordInput = document.getElementById('password');
+        const togglePasswordIcon = document.getElementById('togglePassword');
+
+        togglePasswordIcon.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePasswordIcon.classList.toggle('fa-eye-slash');
+        });
+    </script>
+
 </body>
 
 </html>

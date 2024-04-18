@@ -6,6 +6,28 @@
   padding: 10px 20px;
 }
 
+.passClass {
+  position: relative;
+}
+.passClassLogin {
+  position: relative;
+}
+
+.passClassLogin .togglePasswordj {
+  position: absolute !important;
+  top: 18% !important;
+  right: 4% !important;
+  z-index: 999 !important;
+  cursor: pointer !important;
+}
+
+i#togglePassword {
+  position: absolute;
+  top: 58%;
+  right: 4%;
+  z-index: 999;
+  cursor: pointer;
+}
 .logo img {
   height: 40px;
 }
@@ -79,4 +101,3 @@ body {
 .logout-btn3:active {
   transform: translateY(1px); /* Add a slight downward movement when clicked */
 }
-

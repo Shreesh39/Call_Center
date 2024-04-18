@@ -34,6 +34,25 @@ const createCandidate = catchAsync(async (req, res) => {
     const candidateData = { ...req.body };
     delete candidateData.detailedRemark; // Remove detailedRemark from candidateData
 
+    console.log(candidateData, "candidateData");
+
+    const phoneNumber = candidateData.phoneNumber;
+    const email = candidateData.email;
+
+    const existPhone = await Candidate.findOne({ phoneNumber });
+    if (existPhone) {
+      return res.status(400).json({
+        status: "400",
+        message: `This number is assigned to candidate :  ${existPhone.candidateName} !`,
+      });
+    }
+    const existEmail = await Candidate.findOne({ email });
+    if (existEmail) {
+      return res.status(400).json({
+        status: "400",
+        message: `This email is assigned to candidate :  ${existEmail.candidateName} !`,
+      });
+    }
     const candidate = await Candidate.create({
       ...candidateData,
       recruiterId: identity,
