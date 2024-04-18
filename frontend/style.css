@@ -48,3 +48,35 @@ body {
 .logo img {
   border-radius: 6px;
 }
+.logout-btn,
+.logout-btn2,
+.logout-btn3 {
+  padding: 10px 20px;
+  background-color: #ec8845; /* Red color */
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+}
+
+.logout-btn:hover,
+.logout-btn2:hover,
+.logout-btn3:hover {
+  background-color: #df5d6a; /* Darker red color on hover */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Add a subtle shadow on hover */
+}
+
+.logout-btn:focus,
+.logout-btn2:focus,
+.logout-btn3:focus {
+  outline: none; /* Remove outline on focus */
+}
+
+.logout-btn:active,
+.logout-btn2:active,
+.logout-btn3:active {
+  transform: translateY(1px); /* Add a slight downward movement when clicked */
+}
+
