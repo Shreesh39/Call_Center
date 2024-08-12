@@ -3,6 +3,7 @@ const router = express.Router();
 const { candidateController } = require("../controllers");
 const auth = require("../middlewares/auth");
 const authAdmin = require("../middlewares/authAdmin");
+const multer = require('../upload.middleware');
 
 router.post("/add", auth(), candidateController.createCandidate);
 router.get("/get/:id", auth(), candidateController.getCandidate);

@@ -1,6 +1,7 @@
 const catchAsync = require("../utils/catchAsync");
 const { Candidate } = require("../models");
 const mongoose = require("mongoose");
+const XLSX = require('xlsx');
 // --------------- Create candidate Detail ------------------
 // const createCandidate = catchAsync(async (req, res) => {
 //   try {
@@ -271,6 +272,37 @@ const addRemarksCandidate = catchAsync(async (req, res) => {
     });
   }
 });
+
+
+// Function to read excel file and save data
+exports.uploadCandidates = async (req, res) => {
+  try {
+      if (!req.file) {
+          return res.status(400).send({ message: 'Koi file upload nahi hui.' });
+      }
+
+      const filePath = req.file.path; 
+      const workbook = XLSX.readFile(filePath); 
+      const sheetName = workbook.SheetNames[0]; 
+      const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+      const candidates = sheet.map(row => ({
+          name: row['Name'],         
+          email: row['Email'],       
+          phone: row['Phone'],       
+          experience: row['Experience'], 
+          // more fields to map
+      }));
+
+      // insert all candidates into mongodb
+      await Candidate.insertMany(candidates);
+
+      res.status(200).send({ message: 'Candidates successfully upload ho gaye!' });
+  } catch (error) {
+      console.error('Error uploading candidates:', error);
+      res.status(500).send({ message: 'Candidates upload karne mein dikkat aayi.' });
+  }
+};
 
 module.exports = {
   createCandidate,

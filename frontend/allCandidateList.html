@@ -198,6 +198,19 @@
             background-color: #e6a200;
             /* Slightly darker yellow color on hover */
         }
+        .upload-btn {
+            background-color: #fbbc05;
+            color: black;
+            font-weight: bold;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+            align-self: flex-start;
+            margin-top: -50px; 
+            float:right;
+        }
     </style>
 </head>
 
@@ -325,6 +338,8 @@
     <div class="bodyTag">
         <div class="container">
             <h1>Candidate List Admin</h1>
+            <button id="uploadButton" class="upload-btn">Upload</button>
+<input type="file" id="fileUpload" accept=".xlsx, .xls" style="display: none;" />
             <div class="button-container">
                 <!-- <button id="addCandidateButton">Add Candidate</button> -->
                 <a href="#" id="refreshButton" style="display: none;">Refresh List</a>
@@ -633,6 +648,34 @@
             // Initial data fetch on page load
             refreshButton.click();
         });
+
+
+        // logic for excel file upload 
+        document.getElementById('uploadButton').addEventListener('click', () => {
+        document.getElementById('fileUpload').click();
+    });
+
+    document.getElementById('fileUpload').addEventListener('change', function (event) {
+        var file = event.target.files[0];
+        if (file) {
+            var formData = new FormData();
+            formData.append('file', file);
+
+            fetch('http://localhost:4004/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('File uploaded successfully.');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('File upload failed.');
+            });
+        }
+    });
     </script>
 </body>
 
