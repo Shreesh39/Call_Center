@@ -5,6 +5,12 @@ const auth = require("../middlewares/auth");
 const authAdmin = require("../middlewares/authAdmin");
 const multer = require('../upload.middleware');
 
+
+router.post("/upload", auth(), multer.single('file'), (req, res) => {
+    const filePath = req.file.path;  
+    candidateController.uploadCandidates(req, res, filePath);
+  });
+
 router.post("/add", auth(), candidateController.createCandidate);
 router.get("/get/:id", auth(), candidateController.getCandidate);
 router.get("/list", auth(), candidateController.getCandidateList);

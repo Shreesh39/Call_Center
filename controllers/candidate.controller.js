@@ -275,32 +275,43 @@ const addRemarksCandidate = catchAsync(async (req, res) => {
 
 
 // Function to read excel file and save data
-exports.uploadCandidates = async (req, res) => {
+const uploadCandidates = async (req, res, filePath) => {
   try {
-      if (!req.file) {
-          return res.status(400).send({ message: 'Koi file upload nahi hui.' });
-      }
+    // Read the Excel file
+    const workbook = XLSX.readFile(filePath);
+    const sheetName = workbook.SheetNames[0];
+    const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
-      const filePath = req.file.path; 
-      const workbook = XLSX.readFile(filePath); 
-      const sheetName = workbook.SheetNames[0]; 
-      const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+    console.log('Parsed Excel Data:', sheet); // Log the parsed data
 
-      const candidates = sheet.map(row => ({
-          name: row['Name'],         
-          email: row['Email'],       
-          phone: row['Phone'],       
-          experience: row['Experience'], 
-          // more fields to map
-      }));
 
-      // insert all candidates into mongodb
-      await Candidate.insertMany(candidates);
+    // Parse data into an array of JSON objects
+    const candidates = sheet.map(row => ({
+      recruiterId: row['RecruiterId'],
+      qualification: row['Qualification'],
+      email: row['Email'],
+      candidateName: row['Name'],
+      resume: row['Resume'],
+      phoneNumber: row['Phone'],
+      experience: row['Experience'],
+      computerSkills: row['ComputerSkills'],
+      englishSkills: row['EnglishSkills'],
+      otherSkills: row['OtherSkills'],
+      remark: row['Remark'] || 'Under Process',
+      category: row['Category'],
+      detailedRemarks: [],
+      nextCallback: row['NextCallback'] ? new Date(row['NextCallback']) : null,
+      taskAssignedTo: row['TaskAssignedTo'] || null,
+      taskAssignedAt: row['TaskAssignedAt'] ? new Date(row['TaskAssignedAt']) : null,
+    }));
 
-      res.status(200).send({ message: 'Candidates successfully upload ho gaye!' });
+    // Insert all candidates into MongoDB
+    await Candidate.insertMany(candidates);
+
+    res.status(200).send({ message: 'Candidates successfully uploaded!' });
   } catch (error) {
-      console.error('Error uploading candidates:', error);
-      res.status(500).send({ message: 'Candidates upload karne mein dikkat aayi.' });
+    console.error('Error uploading candidates:', error);
+    res.status(500).send({ message: 'Error occurred during candidate upload.' });
   }
 };
 
@@ -312,4 +323,5 @@ module.exports = {
   deleteCandidate,
   getMyCandidateList,
   addRemarksCandidate,
+  uploadCandidates,
 };
