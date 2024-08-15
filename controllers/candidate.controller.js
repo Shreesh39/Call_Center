@@ -276,39 +276,75 @@ const addRemarksCandidate = catchAsync(async (req, res) => {
 
 // Function to read excel file and save data
 const uploadCandidates = async (req, res, filePath) => {
+  if (!filePath) {
+    console.error("File path is required");
+    return res.status(400).send({ message: 'File path is missing.' });
+  }
+
   try {
     // Read the Excel file
     const workbook = XLSX.readFile(filePath);
     const sheetName = workbook.SheetNames[0];
     const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
-    console.log('Parsed Excel Data:', sheet); // Log the parsed data
+    // Process each row in the sheet
+    for (const row of sheet) {
+      const email = row['Email'];
+      const candidateName = row['Name'];
 
+      let candidate = await Candidate.findOne({ email });
 
-    // Parse data into an array of JSON objects
-    const candidates = sheet.map(row => ({
-      recruiterId: row['RecruiterId'],
-      qualification: row['Qualification'],
-      email: row['Email'],
-      candidateName: row['Name'],
-      resume: row['Resume'],
-      phoneNumber: row['Phone'],
-      experience: row['Experience'],
-      computerSkills: row['ComputerSkills'],
-      englishSkills: row['EnglishSkills'],
-      otherSkills: row['OtherSkills'],
-      remark: row['Remark'] || 'Under Process',
-      category: row['Category'],
-      detailedRemarks: [],
-      nextCallback: row['NextCallback'] ? new Date(row['NextCallback']) : null,
-      taskAssignedTo: row['TaskAssignedTo'] || null,
-      taskAssignedAt: row['TaskAssignedAt'] ? new Date(row['TaskAssignedAt']) : null,
-    }));
+      if (!candidate && candidateName) {
+        candidate = await Candidate.findOne({ candidateName });
+      }
 
-    // Insert all candidates into MongoDB
-    await Candidate.insertMany(candidates);
+      if (candidate) {
+        // Update existing candidate
+        candidate.candidateName = candidateName || candidate.candidateName;
+        candidate.qualification = row['Qualification'] || candidate.qualification;
+        candidate.phoneNumber = row['Phone'] || candidate.phoneNumber;
+        candidate.experience = row['Experience'] || candidate.experience;
+        candidate.computerSkills = row['ComputerSkills'] || candidate.computerSkills;
+        candidate.englishSkills = row['EnglishSkills'] || candidate.englishSkills;
+        candidate.otherSkills = row['OtherSkills'] || candidate.otherSkills;
+        candidate.remark = row['Remark'] || candidate.remark;
+        candidate.category = row['Category'] || candidate.category;
+        candidate.nextCallback = row['NextCallback'] ? new Date(row['NextCallback']) : candidate.nextCallback;
+        candidate.taskAssignedTo = row['TaskAssignedTo'] || candidate.taskAssignedTo;
+        candidate.taskAssignedAt = row['TaskAssignedAt'] ? new Date(row['TaskAssignedAt']) : candidate.taskAssignedAt;
+      } else {
+        // Create new candidate
+        candidate = new Candidate({
+          recruiterId: row['RecruiterId'] || "",
+          qualification: row['Qualification'] || "",
+          email: email || "",
+          candidateName: candidateName || "",
+          phoneNumber: row['Phone'] || "",
+          experience: row['Experience'] || "",
+          computerSkills: row['ComputerSkills'] || "",
+          englishSkills: row['EnglishSkills'] || "",
+          otherSkills: row['OtherSkills'] || "",
+          remark: row['Remark'] || 'Under Process',
+          category: row['Category'] || "",
+          detailedRemarks: [],
+          nextCallback: row['NextCallback'] ? new Date(row['NextCallback']) : null,
+          taskAssignedTo: row['TaskAssignedTo'] || null,
+          taskAssignedAt: row['TaskAssignedAt'] ? new Date(row['TaskAssignedAt']) : null,
+        });
+      }
 
+      // Save the candidate to MongoDB
+      try {
+        await candidate.save();
+        console.log(`Candidate ${candidateName} saved to MongoDB`);
+      } catch (err) {
+        console.error(`Error saving candidate ${candidateName}:`, err);
+      }
+    }
+
+    console.log("Excel data successfully processed");
     res.status(200).send({ message: 'Candidates successfully uploaded!' });
+
   } catch (error) {
     console.error('Error uploading candidates:', error);
     res.status(500).send({ message: 'Error occurred during candidate upload.' });

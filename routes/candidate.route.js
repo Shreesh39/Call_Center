@@ -3,13 +3,35 @@ const router = express.Router();
 const { candidateController } = require("../controllers");
 const auth = require("../middlewares/auth");
 const authAdmin = require("../middlewares/authAdmin");
-const multer = require('../upload.middleware');
+const multer = require("multer");
 
 
-router.post("/upload", auth(), multer.single('file'), (req, res) => {
-    const filePath = req.file.path;  
-    candidateController.uploadCandidates(req, res, filePath);
-  });
+// Configure multer to handle file uploads
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+// Route to handle Excel upload
+router.post("/upload", upload.single("file"), (req, res) => {
+
+  console.log('Upload route hit'); // Log when route is accessed
+
+  if (!req.file) {
+    console.log('No file uploaded'); // Log if no file is provided
+
+    return res.status(400).json({ message: "No file uploaded" });
+  }
+  
+  const excelData = req.file.buffer.toString(); // Convert buffer to string
+  
+  console.log('File uploaded:', req.file.originalname); // Log file name
+  console.log('File Data:', excelData); // Log the file data (you may want to limit this if the data is large)
+
+  // Pass the Excel data to the appropriate controller function
+  candidateController.uploadCandidates(req, res, excelData);
+
+  // Sending response to the client
+  res.status(200).json({ message: "Excel file upload initiated" });
+});
 
 router.post("/add", auth(), candidateController.createCandidate);
 router.get("/get/:id", auth(), candidateController.getCandidate);
