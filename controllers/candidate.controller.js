@@ -275,72 +275,88 @@ const addRemarksCandidate = catchAsync(async (req, res) => {
 
 
 // Function to read excel file and save data
-const uploadCandidates = async (req, res, filePath) => {
-  if (!filePath) {
-    console.error("File path is required");
-    return res.status(400).send({ message: 'File path is missing.' });
+const uploadCandidates = async (req, res) => {
+  if (!req.file) {
+    console.error("File is required");
+    return res.status(400).send({ message: 'No file uploaded.' });
   }
 
   try {
-    // Read the Excel file
-    const workbook = XLSX.readFile(filePath);
+    const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
     const sheetName = workbook.SheetNames[0];
     const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
-    // Process each row in the sheet
+    const operations = [];
+
     for (const row of sheet) {
-      const email = row['Email'];
-      const candidateName = row['Name'];
+      const email = row['email'];
+      const phoneNumber = row['phoneNumber'];
+      const candidateName = row['candidateName'];
 
-      let candidate = await Candidate.findOne({ email });
-
-      if (!candidate && candidateName) {
-        candidate = await Candidate.findOne({ candidateName });
+      if (!email && !phoneNumber) {
+        console.error(`Skipping row due to missing email and phone number: ${JSON.stringify(row)}`);
+        continue;
       }
+
+      let candidate = await Candidate.findOne({ $or: [{ email }, { phoneNumber }] });
 
       if (candidate) {
         // Update existing candidate
-        candidate.candidateName = candidateName || candidate.candidateName;
-        candidate.qualification = row['Qualification'] || candidate.qualification;
-        candidate.phoneNumber = row['Phone'] || candidate.phoneNumber;
-        candidate.experience = row['Experience'] || candidate.experience;
-        candidate.computerSkills = row['ComputerSkills'] || candidate.computerSkills;
-        candidate.englishSkills = row['EnglishSkills'] || candidate.englishSkills;
-        candidate.otherSkills = row['OtherSkills'] || candidate.otherSkills;
-        candidate.remark = row['Remark'] || candidate.remark;
-        candidate.category = row['Category'] || candidate.category;
-        candidate.nextCallback = row['NextCallback'] ? new Date(row['NextCallback']) : candidate.nextCallback;
-        candidate.taskAssignedTo = row['TaskAssignedTo'] || candidate.taskAssignedTo;
-        candidate.taskAssignedAt = row['TaskAssignedAt'] ? new Date(row['TaskAssignedAt']) : candidate.taskAssignedAt;
+        if (candidateName) candidate.candidateName = candidateName;
+        candidate.qualification = row['qualification'] || candidate.qualification;
+        candidate.resume = row['resume'] || candidate.resume;
+        candidate.phoneNumber = phoneNumber || candidate.phoneNumber;
+        candidate.experience = row['experience'] || candidate.experience;
+        candidate.computerSkills = row['computerSkills'] || candidate.computerSkills;
+        candidate.englishSkills = row['englishSkills'] || candidate.englishSkills;
+        candidate.otherSkills = row['otherSkills'] || candidate.otherSkills;
+        candidate.remark = row['remark'] || candidate.remark;
+        candidate.category = row['category'] || candidate.category;
+        candidate.nextCallback = row['nextCallback'] ? new Date(row['nextCallback']) : candidate.nextCallback;
+        candidate.taskAssignedTo = row['taskAssignedTo'] || candidate.taskAssignedTo;
+        candidate.taskAssignedAt = row['taskAssignedAt'] ? new Date(row['taskAssignedAt']) : candidate.taskAssignedAt;
+
+        // Update detailedRemarks if present
+        if (row['detailedRemarks[0].remark']) {
+          const detailedRemark = {
+            remark: row['detailedRemarks[0].remark'],
+            addedby: row['detailedRemarks[0].addedby'],
+            date: row['detailedRemarks[0].date'] ? new Date(row['detailedRemarks[0].date']) : Date.now(),
+          };
+          candidate.detailedRemarks.push(detailedRemark);
+        }
+
+        operations.push(candidate.save());
       } else {
         // Create new candidate
         candidate = new Candidate({
-          recruiterId: row['RecruiterId'] || "",
-          qualification: row['Qualification'] || "",
+          recruiterId: row['recruiterId'] || "",
+          qualification: row['qualification'] || "",
           email: email || "",
           candidateName: candidateName || "",
-          phoneNumber: row['Phone'] || "",
-          experience: row['Experience'] || "",
-          computerSkills: row['ComputerSkills'] || "",
-          englishSkills: row['EnglishSkills'] || "",
-          otherSkills: row['OtherSkills'] || "",
-          remark: row['Remark'] || 'Under Process',
-          category: row['Category'] || "",
-          detailedRemarks: [],
-          nextCallback: row['NextCallback'] ? new Date(row['NextCallback']) : null,
-          taskAssignedTo: row['TaskAssignedTo'] || null,
-          taskAssignedAt: row['TaskAssignedAt'] ? new Date(row['TaskAssignedAt']) : null,
+          resume: row['resume'] || "",
+          phoneNumber: phoneNumber || "",
+          experience: row['experience'] || "",
+          computerSkills: row['computerSkills'] || "",
+          englishSkills: row['englishSkills'] || "",
+          otherSkills: row['otherSkills'] || "",
+          remark: row['remark'] || 'Under Process',
+          category: row['category'] || "",
+          nextCallback: row['nextCallback'] ? new Date(row['nextCallback']) : null,
+          taskAssignedTo: row['taskAssignedTo'] || null,
+          taskAssignedAt: row['taskAssignedAt'] ? new Date(row['taskAssignedAt']) : null,
+          detailedRemarks: row['detailedRemarks[0].remark'] ? [{
+            remark: row['detailedRemarks[0].remark'],
+            addedby: row['detailedRemarks[0].addedby'],
+            date: row['detailedRemarks[0].date'] ? new Date(row['detailedRemarks[0].date']) : Date.now(),
+          }] : [],
         });
-      }
 
-      // Save the candidate to MongoDB
-      try {
-        await candidate.save();
-        console.log(`Candidate ${candidateName} saved to MongoDB`);
-      } catch (err) {
-        console.error(`Error saving candidate ${candidateName}:`, err);
+        operations.push(candidate.save());
       }
     }
+
+    await Promise.all(operations);
 
     console.log("Excel data successfully processed");
     res.status(200).send({ message: 'Candidates successfully uploaded!' });

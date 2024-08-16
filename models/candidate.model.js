@@ -16,7 +16,10 @@ const candidateSchema = mongoose.Schema(
     email: {
       type: String,
       required: true,
+      unique: true,  // Ensure email is unique
       trim: true,
+      lowercase: true,  // Normalize email to lowercase
+      match: [/^\S+@\S+\.\S+$/, "Please enter a valid email address"],  // Basic email validation
     },
     candidateName: {
       type: String,
@@ -25,13 +28,14 @@ const candidateSchema = mongoose.Schema(
     },
     resume: {
       type: String,
-      // required: true,
       trim: true,
     },
     phoneNumber: {
       type: String,
       required: true,
+      unique: true,  // Ensure phone number is unique
       trim: true,
+      match: [/^\d{10}$/, "Please enter a valid 10-digit phone number"],  // Basic phone number validation
     },
     experience: {
       type: String,
@@ -113,7 +117,7 @@ const candidateSchema = mongoose.Schema(
     },
   },
   {
-    timestamps: true,
+    timestamps: true,  // Automatically adds createdAt and updatedAt timestamps
   }
 );
 

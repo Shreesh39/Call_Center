@@ -3,6 +3,7 @@ const routes = require("./routes");
 const passport = require("passport");
 const { jwtStrategy } = require("./config/passport");
 const uploadFile = require("./upload.middleware");
+const candidateRoutes = require("./routes/candidate.route");
 
 
 
@@ -68,9 +69,10 @@ const fileUP = async (req, res) => {
 app.use(express.static(path.join(__dirname, "uploads")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-app.post("/upload", uploadFile.single("file"), fileUP);
+
 
 require("./config/config");
 require("./routes/router")(app);
 
+app.use("/", candidateRoutes);
 app.use("/", routes);

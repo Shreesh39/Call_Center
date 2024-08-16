@@ -12,25 +12,25 @@ const upload = multer({ storage: storage });
 
 // Route to handle Excel upload
 router.post("/upload", upload.single("file"), (req, res) => {
+  console.log('File upload route triggered.');
 
-  console.log('Upload route hit'); // Log when route is accessed
-
+  // Check if file was uploaded
   if (!req.file) {
-    console.log('No file uploaded'); // Log if no file is provided
-
+    console.log('No file uploaded.');
     return res.status(400).json({ message: "No file uploaded" });
   }
   
-  const excelData = req.file.buffer.toString(); // Convert buffer to string
-  
-  console.log('File uploaded:', req.file.originalname); // Log file name
-  console.log('File Data:', excelData); // Log the file data (you may want to limit this if the data is large)
+  const filePath = req.file; // Use req.file.path if you use disk storage
+  console.log('File path:', filePath); // Log the file path
 
-  // Pass the Excel data to the appropriate controller function
-  candidateController.uploadCandidates(req, res, excelData);
-
-  // Sending response to the client
-  res.status(200).json({ message: "Excel file upload initiated" });
+  // Pass the file path to the controller
+  candidateController.uploadCandidates(req, res, filePath)
+    .then(() => {
+      console.log('uploadCandidates function executed.');
+    })
+    .catch(err => {
+      console.error('Error in uploadCandidates function:', err);
+    });
 });
 
 router.post("/add", auth(), candidateController.createCandidate);
