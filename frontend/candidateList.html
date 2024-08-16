@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 
-    <title>Candidate List</title>
+    <title>Client list</title>
     <style>
         body {
             background-color: #f0f4f7;
@@ -203,12 +203,12 @@
             <a href="addUser.html" class="nav-link">Add User</a>
             <a href="userList.html" class="nav-link">User List</a>
             
-            <a href="addCandidate.html" class="nav-link">Add Candidate</a>
-            <a href="allCandidateList.html" class="nav-link">Candidates List</a>
+            <a href="addCandidate.html" class="nav-link"> Add Client</a>
+            <a href="allCandidateList.html" class="nav-link">Client list</a>
             <a href="profile.html" class="nav-link profile-icon">
                 <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
             </a>
-            <!-- <a href="addCandidate.html" class="nav-link">Add Candidate</a> -->
+            <!-- <a href="addCandidate.html" class="nav-link"> Add Client</a> -->
             <button class="logout-btn">Logout</button>
         </div>
     </nav>
@@ -223,8 +223,8 @@
         <div class="nav-links">
                 <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
-            <a href="addCandidate.html" class="nav-link">Add Candidate</a>
-            <a href="candidateList.html" class="nav-link" style="background-color: #507ca8;">Candidates List</a>
+            <a href="addCandidate.html" class="nav-link"> Add Client</a>
+            <a href="candidateList.html" class="nav-link" style="background-color: #507ca8;">Client list</a>
             <a href="profile.html" class="nav-link profile-icon">
                 <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
             </a>
@@ -242,8 +242,8 @@
         <div class="nav-links">
                 <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
-            <a href="addCandidate.html" class="nav-link">Add Candidate</a>
-            <a href="candidateList.html" class="nav-link" style="background-color: #507ca8;">Candidates List</a>
+            <a href="addCandidate.html" class="nav-link"> Add Client</a>
+            <a href="candidateList.html" class="nav-link" style="background-color: #507ca8;">Client list</a>
             <a href="profile.html" class="nav-link profile-icon">
                 <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
             </a>
@@ -312,9 +312,9 @@
     </script>
     <div class="bodyTag">
         <div class="container">
-            <h1>My Candidate list</h1>
+            <h1>My Client list</h1>
             <div class="button-container">
-                <!-- <button id="addCandidateButton">Add Candidate</button> -->
+                <!-- <button id="addCandidateButton"> Add Client</button> -->
                 <a href="#" id="refreshButton" style="display: none;">Refresh List</a>
             </div>
             <table id="candidateTable">
@@ -459,10 +459,10 @@
                     if (responseData.status === '200') {
                         renderCandidates(responseData.data);
                     } else {
-                        console.error('Error fetching candidate list:', responseData.message);
+                        console.error('Error fetching Client list:', responseData.message);
                     }
                 } catch (error) {
-                    console.error('Error fetching candidate list:', error);
+                    console.error('Error fetching Client list:', error);
                 }
             });
 

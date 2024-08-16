@@ -2,7 +2,7 @@ const landing = (req, res) => {
   const responseContent = `
     <html>
       <head>
-        <title>HRMS Server</title>
+        <title>CAll Center Server</title>
         <style>
           body {
             font-family: 'Arial', sans-serif;

@@ -169,7 +169,7 @@ const getCandidateList = catchAsync(async (req, res) => {
 
     return res.status(200).json({
       status: "200",
-      message: "Candidate list fetched successfully!",
+      message: "Client list fetched successfully!",
       data: candidateList,
       page,
       totalPages: Math.ceil(totalCount / perPage),
@@ -178,7 +178,7 @@ const getCandidateList = catchAsync(async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       status: "500",
-      message: "An error occurred while fetching candidate list!",
+      message: "An error occurred while fetching Client list!",
       error: error.message,
     });
   }
@@ -214,7 +214,7 @@ const getMyCandidateList = catchAsync(async (req, res) => {
 
     return res.status(200).json({
       status: "200",
-      message: "Candidate list fetched successfully!",
+      message: "Client list fetched successfully!",
       data: candidateList,
       page,
       totalPages: Math.ceil(totalCount / perPage),
@@ -223,13 +223,13 @@ const getMyCandidateList = catchAsync(async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       status: "500",
-      message: "An error occurred while fetching candidate list!",
+      message: "An error occurred while fetching Client list!",
       error: error.message,
     });
   }
 });
 
-// -------------------- Add candidate Remarks  ------------------
+// --------------------  Add Client Remarks  ------------------
 const addRemarksCandidate = catchAsync(async (req, res) => {
   try {
     // Extract necessary data from the request
