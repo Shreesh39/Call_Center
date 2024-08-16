@@ -81,7 +81,7 @@
             <a href="userList.html" class="nav-link">User List</a>
 
             <a href="addCandidate.html" class="nav-link"> Add Client</a>
-            <a href="allCandidateList.html" class="nav-link">Client list</a>
+            <a href="allCandidateList.html" class="nav-link">Candidates List</a>
             <a href="profile.html" class="nav-link profile-icon">
                 <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
             </a>
@@ -101,7 +101,7 @@
             <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link"> Add Client</a>
-            <a href="candidateList.html" class="nav-link">Client list</a>
+            <a href="candidateList.html" class="nav-link">Candidates List</a>
             <a href="profile.html" class="nav-link profile-icon">
                 <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
             </a>
@@ -120,7 +120,7 @@
             <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link"> Add Client</a>
-            <a href="candidateList.html" class="nav-link">Client list</a>
+            <a href="candidateList.html" class="nav-link">Candidates List</a>
             <a href="profile.html" class="nav-link profile-icon">
                 <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
             </a>
@@ -240,9 +240,7 @@ function fetchCandidateDetails() {
                 <p><strong>Remark:</strong> ${data.data.remark}</p>
                 <p><strong>Category:</strong> ${data.data.category}</p>
                 <p><strong>Next Callback:</strong> ${(data.data.nextCallback !== 'N/A' ? new Date(data.data.nextCallback).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A')}</p>
-                <p><strong>Task assigned to:</strong> ${data.data.taskAssignedTo.first_name} ${data.data.taskAssignedTo.last_name}</p>
                 <p><strong>Task assigned at:</strong> ${(data.data.taskAssignedAt !== 'N/A' ? new Date(data.data.taskAssignedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A')}</p>
-                <p><strong>Resume:</strong> <a href="${data.data.resume}" target="_blank">View Resume</a></p>
             </div>
             <div class="details-section">
                 <h3>Added Remarks</h3>
