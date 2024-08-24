@@ -2,6 +2,7 @@ const catchAsync = require("../utils/catchAsync");
 const { Candidate } = require("../models");
 const mongoose = require("mongoose");
 const XLSX = require('xlsx');
+const UploadLog = require('../models/uploadLog'); // Import the UploadLog model
 // --------------- Create candidate Detail ------------------
 // const createCandidate = catchAsync(async (req, res) => {
 //   try {
@@ -287,6 +288,8 @@ const uploadCandidates = async (req, res) => {
     const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
     const operations = [];
+    const newCandidates = [];
+    const duplicates = [];
 
     for (const row of sheet) {
       const email = row['email'];
@@ -301,32 +304,11 @@ const uploadCandidates = async (req, res) => {
       let candidate = await Candidate.findOne({ $or: [{ email }, { phoneNumber }] });
 
       if (candidate) {
-        // Update existing candidate
-        if (candidateName) candidate.candidateName = candidateName;
-        candidate.qualification = row['qualification'] || candidate.qualification;
-        candidate.resume = row['resume'] || candidate.resume;
-        candidate.phoneNumber = phoneNumber || candidate.phoneNumber;
-        candidate.experience = row['experience'] || candidate.experience;
-        candidate.computerSkills = row['computerSkills'] || candidate.computerSkills;
-        candidate.englishSkills = row['englishSkills'] || candidate.englishSkills;
-        candidate.otherSkills = row['otherSkills'] || candidate.otherSkills;
-        candidate.remark = row['remark'] || candidate.remark;
-        candidate.category = row['category'] || candidate.category;
-        candidate.nextCallback = row['nextCallback'] ? new Date(row['nextCallback']) : candidate.nextCallback;
-        candidate.taskAssignedTo = row['taskAssignedTo'] || candidate.taskAssignedTo;
-        candidate.taskAssignedAt = row['taskAssignedAt'] ? new Date(row['taskAssignedAt']) : candidate.taskAssignedAt;
-
-        // Update detailedRemarks if present
-        if (row['detailedRemarks[0].remark']) {
-          const detailedRemark = {
-            remark: row['detailedRemarks[0].remark'],
-            addedby: row['detailedRemarks[0].addedby'],
-            date: row['detailedRemarks[0].date'] ? new Date(row['detailedRemarks[0].date']) : Date.now(),
-          };
-          candidate.detailedRemarks.push(detailedRemark);
-        }
-
-        operations.push(candidate.save());
+        // Duplicate found, push to duplicates
+        duplicates.push({
+          existingCandidate: candidate._id,
+          newEntry: row
+        });
       } else {
         // Create new candidate
         candidate = new Candidate({
@@ -353,19 +335,48 @@ const uploadCandidates = async (req, res) => {
         });
 
         operations.push(candidate.save());
+        newCandidates.push(candidate);
       }
     }
 
     await Promise.all(operations);
 
+    // Populate the duplicates array with full candidate details
+    const populatedDuplicates = await Promise.all(
+      duplicates.map(async (dup) => {
+        const existingCandidate = await Candidate.findById(dup.existingCandidate);
+        return {
+          existingCandidate,
+          newEntry: dup.newEntry
+        };
+      })
+    );
+
+    // Save the upload log to the database
+    const uploadId = new mongoose.Types.ObjectId(); // Generate a unique upload ID
+    const uploadLog = new UploadLog({
+      uploadId: uploadId.toString(),
+      newCandidates: newCandidates.map(candidate => candidate._id), // Store only IDs
+      duplicates: populatedDuplicates
+    });
+
+    await uploadLog.save();
+
     console.log("Excel data successfully processed");
-    res.status(200).send({ message: 'Candidates successfully uploaded!' });
+    res.status(200).send({
+      message: 'Candidates successfully uploaded!',
+      uploadId: uploadId.toString(), // Return the upload ID to the frontend
+      newCandidates: newCandidates, // Include the new candidates details
+      duplicates: populatedDuplicates // Include the detailed duplicates
+    });
 
   } catch (error) {
     console.error('Error uploading candidates:', error);
     res.status(500).send({ message: 'Error occurred during candidate upload.' });
   }
 };
+
+
 
 module.exports = {
   createCandidate,

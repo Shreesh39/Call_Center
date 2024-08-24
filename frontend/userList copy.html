@@ -187,7 +187,7 @@
         <div class="logo">
             <img src="./HRM.jpg" alt="HR Logo">
         </div>
-        <div class="panelType">Recruiter Panel</div>
+        <div class="panelType">Caller Panel</div>
 
         <div class="nav-links">
                 <a href="newTask.html" class="nav-link">New Events</a>
@@ -288,7 +288,7 @@
                     <select id="roleSelect" onchange="fetchData()">
                         <option value="all">All</option>
                         <option value="admin">Admin</option>
-                        <option value="recruiter">Recruiter</option>
+                        <option value="recruiter">Caller</option>
                         <option value="manager">Manager</option>
                     </select>
                 </div>
@@ -340,7 +340,7 @@
                     <label for="role">Role:</label>
                     <select id="role" name="role">
                         <!-- <option value="admin">Admin</option> -->
-                        <option value="recruiter">Recruiter</option>
+                        <option value="recruiter">Caller</option>
                         <option value="manager">Manager</option>
                     </select><br>
 
@@ -370,8 +370,6 @@
         }
 
         function renderUsers(users) {
-    const userDataContainer = document.getElementById('userData');
-    let tableRows = '';
     const userDataContainer = document.getElementById('userData');
     let tableRows = '';
 

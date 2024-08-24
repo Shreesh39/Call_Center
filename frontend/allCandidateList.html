@@ -229,7 +229,7 @@
             <a href="userList.html" class="nav-link">User List</a>
 
             <a href="addCandidate.html" class="nav-link"> Add Client</a>
-            <a href="allCandidateList.html" class="nav-link" style="background-color: #507ca8;">Candidates List</a>
+            <a href="allCandidateList.html" class="nav-link" style="background-color: #507ca8;">Client List</a>
             <a href="profile.html" class="nav-link profile-icon">
                 <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
             </a>
@@ -243,13 +243,13 @@
         <div class="logo">
             <img src="./HRM.jpg" alt="HR Logo">
         </div>
-        <div class="panelType">Recruiter Panel</div>
+        <div class="panelType">Caller Panel</div>
 
         <div class="nav-links">
             <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link"> Add Client</a>
-            <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <a href="candidateList.html" class="nav-link">Client List</a>
             <a href="profile.html" class="nav-link profile-icon">
                 <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
             </a>
@@ -268,7 +268,7 @@
             <a href="newTask.html" class="nav-link">New Events</a>
             <a href="myTask.html" class="nav-link">My Events</a>
             <a href="addCandidate.html" class="nav-link"> Add Client</a>
-            <a href="candidateList.html" class="nav-link">Candidates List</a>
+            <a href="candidateList.html" class="nav-link">Client List</a>
             <a href="profile.html" class="nav-link profile-icon">
                 <i class="fa-solid fa-user"></i> <!-- Font Awesome user icon -->
             </a>
@@ -347,7 +347,7 @@
             <table id="candidateTable">
                 <thead>
                     <tr>
-                        <th>Candidate Name</th>
+                        <th>Client Name</th>
                         <th>Qualification</th>
                         <th>Phone Number</th>
                         <th>Experience</th>
@@ -356,7 +356,7 @@
                         <th>Other Skills</th>
                         <th>Remark</th>
                         <th>Category</th>
-                        <th>Recruiter Name</th>
+                        <th>Caller Name</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -379,7 +379,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="candidateName">Candidate Name:</label>
+                    <label for="candidateName">Client Name:</label>
                     <input type="text" id="candidateName" name="candidateName" required>
                 </div>
 
@@ -449,6 +449,8 @@
 
     </div>
 
+  
+
     <!-- JavaScript for fetching and manipulating data -->
     <script>
         function navigateToCandidateDetail(candidateId) {
@@ -512,8 +514,7 @@
                             <td>
                                 <button class="editButton" data-id="${id}">Edit</button>
                                 <button class="deleteButton" data-id="${id}">Delete</button>
-                                <button onclick="downloadResume('${resume}')" class="downloadButton">Resume</button>
-                                <button onclick="navigateToCandidateDetail('${id}')" class="viewButton">View Candidate</button>
+                                <button onclick="navigateToCandidateDetail('${id}')" class="viewButton">View</button>
 
                             </td>
                         </tr>
@@ -669,6 +670,8 @@
             .then(data => {
                 console.log('Success:', data);
                 alert('File uploaded successfully.');
+                fetchUploadLog(data.uploadId);
+
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -676,7 +679,71 @@
             });
         }
     });
+
+    
+
+
+    async function fetchUploadLog(uploadId) {
+  try {
+    const response = await fetch(`http://localhost:4004/api/upload-log/${uploadId}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch upload log');
+    }
+    const data = await response.json();
+    displayUploadLog(data); // Call the function to display the data
+  } catch (error) {
+    console.error('Error fetching upload log:', error);
+  }
+}
+
+function displayUploadLog(data) {
+  console.log('Displaying data:', data);
+
+  const { newCandidates, duplicates } = data;
+
+  // Display new candidates in a table
+  const newCandidatesList = document.getElementById('new-candidates-list');
+  newCandidatesList.innerHTML = '<h3 style="text-align: center;">Duplicate Clients</h3>';
+  
+//   // Create table for new candidates
+//   let newCandidatesTable = '<table border="1"><thead><tr><th>Candidate ID</th></tr></thead><tbody>';
+//   newCandidates.forEach(candidateId => {
+//     newCandidatesTable += `<tr><td>${candidateId}</td></tr>`;
+//   });
+//   newCandidatesTable += '</tbody></table>';
+
+//   newCandidatesList.innerHTML = newCandidatesTable;
+
+  // Display duplicates in a table
+  const duplicatesList = document.getElementById('duplicates-list');
+  duplicatesList.innerHTML = '<h3>Duplicate Candidates</h3>';
+  
+  // Create table for duplicates
+  let duplicatesTable = '<table border="1"><thead><tr><th>Phone Number</th><th>Existing Client ID</th><th>Email</th><th>Name</th><th>Experience</th><th>Remark</th></tr></thead><tbody>';
+  duplicates.forEach(duplicate => {
+    const { existingCandidate, newEntry } = duplicate;
+    duplicatesTable += `
+      <tr>
+        <td>${newEntry.phoneNumber}</td>
+        <td>${existingCandidate}</td>
+        <td>${newEntry.email}</td>
+        <td>${newEntry.candidateName}</td>
+        <td>${newEntry.experience}</td>
+        <td>${newEntry.remark}</td>
+      </tr>
+    `;
+  });
+  duplicatesTable += '</tbody></table>';
+
+  duplicatesList.innerHTML = duplicatesTable;
+}
+
+
     </script>
+    <div id="new-candidates-list"></div>
+    <div id="duplicates-list"></div>
+    
+      
 </body>
 
 </html>

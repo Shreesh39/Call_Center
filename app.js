@@ -4,6 +4,7 @@ const passport = require("passport");
 const { jwtStrategy } = require("./config/passport");
 const uploadFile = require("./upload.middleware");
 const candidateRoutes = require("./routes/candidate.route");
+const uploadLogRoutes = require('./routes/uploadLogRoutes');
 
 
 
@@ -35,33 +36,7 @@ app.listen(port, (req, res) => {
 //   res.sendFile(HTML_FILE_PATH);
 // });
 
-// --------- Upload Controller Start------------------
-
-const fileUP = async (req, res) => {
-  try {
-    if (req.file) {
-      console.log("ayaaaaaaaaaaaaaaaaa");
-      const doc = await `http://localhost:${port}/${req.file.filename}`;
-      return res.status(200).json({
-        status: 200,
-        message: "File uploaded successfully",
-        file: doc,
-      });
-    }
-    return res.status(400).json({
-      status: 400,
-      message: "File not found!",
-      file: {},
-    });
-  } catch (error) {
-    return res.status(500).json({
-      status: 500,
-      message: "Server Error !",
-      error,
-      stack: error.stack,
-    });
-  }
-};
+// --------- Upload Controller Start-----------------
 
 
 // --------- Upload Controller Ends------------------
@@ -76,3 +51,4 @@ require("./routes/router")(app);
 
 app.use("/", candidateRoutes);
 app.use("/", routes);
+app.use('/api', uploadLogRoutes);
