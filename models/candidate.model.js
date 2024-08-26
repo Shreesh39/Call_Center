@@ -8,11 +8,6 @@ const candidateSchema = mongoose.Schema(
       ref: "User",
       required: true,
     },
-    qualification: {
-      type: String,
-      required: true,
-      trim: true,
-    },
     email: {
       type: String,
       required: true,
@@ -26,67 +21,12 @@ const candidateSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
-    resume: {
-      type: String,
-      trim: true,
-    },
     phoneNumber: {
       type: String,
       required: true,
       unique: true,  // Ensure phone number is unique
       trim: true,
       match: [/^\d{10}$/, "Please enter a valid 10-digit phone number"],  // Basic phone number validation
-    },
-    experience: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    computerSkills: {
-      type: String,
-      enum: [
-        "Introduction level",
-        "Basic level",
-        "Intermediate level",
-        "Can work easily",
-      ],
-      default: "Introduction level",
-    },
-    englishSkills: {
-      type: String,
-      enum: [
-        "Introduction level",
-        "Basic level",
-        "Intermediate level",
-        "Can work easily",
-      ],
-      default: "Introduction level",
-    },
-    otherSkills: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    remark: {
-      type: String,
-      enum: ["Selected", "Rejected", "Under Process"],
-      default: "Under Process",
-    },
-    category: {
-      type: String,
-      enum: [
-        "Software Development",
-        "Sales",
-        "Calling International",
-        "Calling Domestic",
-        "Housekeeping",
-        "Day Clerical",
-        "Marketing",
-        "Internet Marketing",
-        "Graphic Design",
-        "Other",
-      ],
-      required: true,
     },
     detailedRemarks: [
       {

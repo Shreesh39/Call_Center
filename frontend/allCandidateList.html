@@ -348,14 +348,7 @@
                 <thead>
                     <tr>
                         <th>Client Name</th>
-                        <th>Qualification</th>
                         <th>Phone Number</th>
-                        <th>Experience</th>
-                        <th>Computer Skills</th>
-                        <th>English Skills</th>
-                        <th>Other Skills</th>
-                        <th>Remark</th>
-                        <th>Category</th>
                         <th>Caller Name</th>
                         <th>Action</th>
                     </tr>
@@ -373,10 +366,6 @@
         <div class="modal" id="editModal">
             <h2>Edit Candidate</h2>
             <form id="editForm" class="styled-form">
-                <div class="form-group">
-                    <label for="qualification">Qualification:</label>
-                    <input type="text" id="qualification" name="qualification" required>
-                </div>
 
                 <div class="form-group">
                     <label for="candidateName">Client Name:</label>
@@ -386,61 +375,6 @@
                 <div class="form-group">
                     <label for="phoneNumber">Phone Number:</label>
                     <input type="text" id="phoneNumber" name="phoneNumber" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="experience">Experience:</label>
-                    <input type="text" id="experience" name="experience" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="computerSkills">Computer Skills:</label>
-                    <select id="computerSkills" name="computerSkills">
-                        <option value="Introduction level">Introduction level</option>
-                        <option value="Basic level">Basic level</option>
-                        <option value="Intermediate level">Intermediate level</option>
-                        <option value="Can work easily">Can work easily</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="englishSkills">English Skills:</label>
-                    <select id="englishSkills" name="englishSkills">
-                        <option value="Introduction level">Introduction level</option>
-                        <option value="Basic level">Basic level</option>
-                        <option value="Intermediate level">Intermediate level</option>
-                        <option value="Can work easily">Can work easily</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="otherSkills">Other Skills:</label>
-                    <input type="text" id="otherSkills" name="otherSkills" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="remark">Remark:</label>
-                    <select id="remark" name="remark">
-                        <option value="Selected">Selected</option>
-                        <option value="Rejected">Rejected</option>
-                        <option value="Under Process">Under Process</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="category">Category:</label>
-                    <select id="category" name="category">
-                        <option value="Software Development">Software Development</option>
-                        <option value="Sales">Sales</option>
-                        <option value="Calling International">Calling International</option>
-                        <option value="Calling Domestic">Calling Domestic</option>
-                        <option value="Housekeeping">Housekeeping</option>
-                        <option value="Day Clerical">Day Clerical</option>
-                        <option value="Marketing">Marketing</option>
-                        <option value="Internet Marketing">Internet Marketing</option>
-                        <option value="Graphic Design">Graphic Design</option>
-                        <option value="Other">Other</option>
-                    </select>
                 </div>
 
                 <button type="submit">Save Changes</button>
@@ -502,14 +436,7 @@
                     tableRows += `
                         <tr>
                             <td>${candidateName}</td>
-                            <td>${qualification}</td>
                             <td>${phoneNumber}</td>
-                            <td>${experience}</td>
-                            <td>${computerSkills}</td>
-                            <td>${englishSkills}</td>
-                            <td>${otherSkills}</td>
-                            <td>${remark}</td>
-                            <td>${category}</td>
                             <td>${recruiterName}</td>
                             <td>
                                 <button class="editButton" data-id="${id}">Edit</button>
@@ -559,15 +486,9 @@
                 const { qualification, candidateName, phoneNumber, experience, computerSkills, englishSkills, otherSkills, remark, category } = candidate;
                 const editFormInputs = editForm.elements;
 
-                editFormInputs.qualification.value = qualification;
                 editFormInputs.candidateName.value = candidateName;
                 editFormInputs.phoneNumber.value = phoneNumber;
-                editFormInputs.experience.value = experience;
-                editFormInputs.computerSkills.value = computerSkills;
-                editFormInputs.englishSkills.value = englishSkills;
-                editFormInputs.otherSkills.value = otherSkills;
-                editFormInputs.remark.value = remark;
-                editFormInputs.category.value = category;
+            
 
                 editForm.dataset.id = candidate.id; // Store candidate ID in the form dataset for submission
             }
@@ -703,33 +624,39 @@ function displayUploadLog(data) {
 
   // Display new candidates in a table
   const newCandidatesList = document.getElementById('new-candidates-list');
-  newCandidatesList.innerHTML = '<h3 style="text-align: center;">Duplicate Clients</h3>';
+  newCandidatesList.innerHTML = '<h3 style="text-align: center;">New Candidates</h3>';
   
-//   // Create table for new candidates
-//   let newCandidatesTable = '<table border="1"><thead><tr><th>Candidate ID</th></tr></thead><tbody>';
-//   newCandidates.forEach(candidateId => {
-//     newCandidatesTable += `<tr><td>${candidateId}</td></tr>`;
-//   });
-//   newCandidatesTable += '</tbody></table>';
+  // Create table for new candidates (optional, if you want to display it)
+  let newCandidatesTable = '<table border="1"><thead><tr><th>Candidate ID</th></tr></thead><tbody>';
+  newCandidates.forEach(candidate => {
+    newCandidatesTable += `<tr><td>${candidate._id}</td></tr>`;
+  });
+  newCandidatesTable += '</tbody></table>';
 
-//   newCandidatesList.innerHTML = newCandidatesTable;
+  newCandidatesList.innerHTML = newCandidatesTable;
 
   // Display duplicates in a table
   const duplicatesList = document.getElementById('duplicates-list');
   duplicatesList.innerHTML = '<h3>Duplicate Candidates</h3>';
   
   // Create table for duplicates
-  let duplicatesTable = '<table border="1"><thead><tr><th>Phone Number</th><th>Existing Client ID</th><th>Email</th><th>Name</th><th>Experience</th><th>Remark</th></tr></thead><tbody>';
+  let duplicatesTable = '<table border="1"><thead><tr><th>Phone Number</th><th>Existing Name</th><th>Email</th><th>New Client Name</th><th>Remarks</th></tr></thead><tbody>';
   duplicates.forEach(duplicate => {
-    const { existingCandidate, newEntry } = duplicate;
+    const { existingName, newEntry, existingRemarks } = duplicate;
+    const remarks = existingRemarks.map(remark => 
+      `<div>
+         <p><strong>Remark:</strong> ${remark.remark}</p>
+         <p><strong>Added By:</strong> ${remark.addedby}</p>
+         <p><strong>Date:</strong> ${new Date(remark.date).toLocaleString()}</p>
+       </div>`).join('');
+    
     duplicatesTable += `
       <tr>
         <td>${newEntry.phoneNumber}</td>
-        <td>${existingCandidate}</td>
+        <td>${existingName}</td>
         <td>${newEntry.email}</td>
         <td>${newEntry.candidateName}</td>
-        <td>${newEntry.experience}</td>
-        <td>${newEntry.remark}</td>
+        <td>${remarks}</td>
       </tr>
     `;
   });
@@ -739,8 +666,8 @@ function displayUploadLog(data) {
 }
 
 
+
     </script>
-    <div id="new-candidates-list"></div>
     <div id="duplicates-list"></div>
     
       

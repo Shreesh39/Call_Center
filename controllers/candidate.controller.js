@@ -3,6 +3,7 @@ const { Candidate } = require("../models");
 const mongoose = require("mongoose");
 const XLSX = require('xlsx');
 const UploadLog = require('../models/uploadLog'); // Import the UploadLog model
+const User = require('../models/user.model');
 // --------------- Create candidate Detail ------------------
 // const createCandidate = catchAsync(async (req, res) => {
 //   try {
@@ -304,26 +305,28 @@ const uploadCandidates = async (req, res) => {
       let candidate = await Candidate.findOne({ $or: [{ email }, { phoneNumber }] });
 
       if (candidate) {
-        // Duplicate found, push to duplicates
+        // Duplicate found, fetch additional details including remarks and replace IDs with names
+        const detailedRemarks = await Promise.all(candidate.detailedRemarks.map(async (remark) => {
+          const user = await User.findById(remark.addedby).select('first_name').exec();
+          return {
+            ...remark,
+            addedby: user ? user.first_name : 'Unknown'
+          };
+        }));
+
         duplicates.push({
           existingCandidate: candidate._id,
+          existingName: candidate.candidateName,
+          existingRemarks: detailedRemarks,  // Replace ID with names
           newEntry: row
         });
       } else {
         // Create new candidate
         candidate = new Candidate({
           recruiterId: row['recruiterId'] || "",
-          qualification: row['qualification'] || "",
           email: email || "",
           candidateName: candidateName || "",
-          resume: row['resume'] || "",
           phoneNumber: phoneNumber || "",
-          experience: row['experience'] || "",
-          computerSkills: row['computerSkills'] || "",
-          englishSkills: row['englishSkills'] || "",
-          otherSkills: row['otherSkills'] || "",
-          remark: row['remark'] || 'Under Process',
-          category: row['category'] || "",
           nextCallback: row['nextCallback'] ? new Date(row['nextCallback']) : null,
           taskAssignedTo: row['taskAssignedTo'] || null,
           taskAssignedAt: row['taskAssignedAt'] ? new Date(row['taskAssignedAt']) : null,
@@ -341,23 +344,12 @@ const uploadCandidates = async (req, res) => {
 
     await Promise.all(operations);
 
-    // Populate the duplicates array with full candidate details
-    const populatedDuplicates = await Promise.all(
-      duplicates.map(async (dup) => {
-        const existingCandidate = await Candidate.findById(dup.existingCandidate);
-        return {
-          existingCandidate,
-          newEntry: dup.newEntry
-        };
-      })
-    );
-
     // Save the upload log to the database
     const uploadId = new mongoose.Types.ObjectId(); // Generate a unique upload ID
     const uploadLog = new UploadLog({
       uploadId: uploadId.toString(),
       newCandidates: newCandidates.map(candidate => candidate._id), // Store only IDs
-      duplicates: populatedDuplicates
+      duplicates: duplicates // Include the duplicates with existing details
     });
 
     await uploadLog.save();
@@ -367,7 +359,7 @@ const uploadCandidates = async (req, res) => {
       message: 'Candidates successfully uploaded!',
       uploadId: uploadId.toString(), // Return the upload ID to the frontend
       newCandidates: newCandidates, // Include the new candidates details
-      duplicates: populatedDuplicates // Include the detailed duplicates
+      duplicates: duplicates // Include the detailed duplicates
     });
 
   } catch (error) {
@@ -375,7 +367,6 @@ const uploadCandidates = async (req, res) => {
     res.status(500).send({ message: 'Error occurred during candidate upload.' });
   }
 };
-
 
 
 module.exports = {

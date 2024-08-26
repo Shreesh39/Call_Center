@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <title>Candidate Details</title>
+    <title>Client Details</title>
     <style>
         /* Some basic styling */
         body {
@@ -189,7 +189,7 @@
     </script>
 
     <div class="container">
-        <h1>Candidate Details</h1>
+        <h1>Client Details</h1>
         <div class="details" id="candidateDetails">
             <!-- Candidate details will be displayed here -->
         </div>
@@ -221,7 +221,7 @@ function fetchCandidateDetails() {
             <div class="details-section">
                 <h3>Personal Information</h3>
                 <p><strong style="font-size: 16px; color: #ff0000;">recruiter Name:</strong> <strong style="font-size: 16px; color: #ff0000;">${data.data.recruiterId.first_name}</strong> <strong style="font-size: 16px; color: #ff0000;">${data.data.recruiterId.last_name}</strong></p>
-                <p><strong>Candidate Name:</strong> ${data.data.candidateName}</p>
+                <p><strong>Client Name:</strong> ${data.data.candidateName}</p>
                 <p><strong>Phone Number:</strong> ${data.data.phoneNumber}</p>
             </div>
             <div class="details-section">

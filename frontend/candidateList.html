@@ -321,15 +321,8 @@
                 <thead>
                     <tr>
                         <th>Caller Name</th>
-                        <th>Qualification</th>
-                        <th>Candidate Name</th>
+                        <th>Client Name</th>
                         <th>Phone Number</th>
-                        <th>Experience</th>
-                        <th>Computer Skills</th>
-                        <th>English Skills</th>
-                        <th>Other Skills</th>
-                        <th>Remark</th>
-                        <th>Category</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -346,11 +339,7 @@
         <div class="modal" id="editModal">
             <h2>Edit Candidate</h2>
             <form id="editForm" class="styled-form">
-                <div class="form-group">
-                    <label for="qualification">Qualification:</label>
-                    <input type="text" id="qualification" name="qualification" required>
-                </div>
-        
+            
                 <div class="form-group">
                     <label for="candidateName">Client Name:</label>
                     <input type="text" id="candidateName" name="candidateName" required>
@@ -359,61 +348,6 @@
                 <div class="form-group">
                     <label for="phoneNumber">Phone Number:</label>
                     <input type="text" id="phoneNumber" name="phoneNumber" required>
-                </div>
-        
-                <div class="form-group">
-                    <label for="experience">Experience:</label>
-                    <input type="text" id="experience" name="experience" required>
-                </div>
-        
-                <div class="form-group">
-                    <label for="computerSkills">Computer Skills:</label>
-                    <select id="computerSkills" name="computerSkills">
-                        <option value="Introduction level">Introduction level</option>
-                        <option value="Basic level">Basic level</option>
-                        <option value="Intermediate level">Intermediate level</option>
-                        <option value="Can work easily">Can work easily</option>
-                    </select>
-                </div>
-        
-                <div class="form-group">
-                    <label for="englishSkills">English Skills:</label>
-                    <select id="englishSkills" name="englishSkills">
-                        <option value="Introduction level">Introduction level</option>
-                        <option value="Basic level">Basic level</option>
-                        <option value="Intermediate level">Intermediate level</option>
-                        <option value="Can work easily">Can work easily</option>
-                    </select>
-                </div>
-        
-                <div class="form-group">
-                    <label for="otherSkills">Other Skills:</label>
-                    <input type="text" id="otherSkills" name="otherSkills" required>
-                </div>
-        
-                <div class="form-group">
-                    <label for="remark">Remark:</label>
-                    <select id="remark" name="remark">
-                        <option value="Selected">Selected</option>
-                        <option value="Rejected">Rejected</option>
-                        <option value="Under Process">Under Process</option>
-                    </select>
-                </div>
-        
-                <div class="form-group">
-                    <label for="category">Category:</label>
-                    <select id="category" name="category">
-                        <option value="Software Development">Software Development</option>
-                        <option value="Sales">Sales</option>
-                        <option value="Calling International">Calling International</option>
-                        <option value="Calling Domestic">Calling Domestic</option>
-                        <option value="Housekeeping">Housekeeping</option>
-                        <option value="Day Clerical">Day Clerical</option>
-                        <option value="Marketing">Marketing</option>
-                        <option value="Internet Marketing">Internet Marketing</option>
-                        <option value="Graphic Design">Graphic Design</option>
-                        <option value="Other">Other</option>
-                    </select>
                 </div>
         
                 <button type="submit">Save Changes</button>
@@ -474,20 +408,12 @@
                     tableRows += `
                         <tr>
                             <td>${recruiterName}</td>
-                            <td>${qualification}</td>
                             <td>${candidateName}</td>
                             <td>${phoneNumber}</td>
-                            <td>${experience}</td>
-                            <td>${computerSkills}</td>
-                            <td>${englishSkills}</td>
-                            <td>${otherSkills}</td>
-                            <td>${remark}</td>
-                            <td>${category}</td>
                             <td>
                                 <button class="editButton" data-id="${id}">Edit</button>
                                 <button class="deleteButton" data-id="${id}">Delete</button>
-                                <button onclick="downloadResume('${resume}')" class="downloadButton">Resume</button>
-                                <button onclick="navigateToCandidateDetail('${id}')" class="viewButton">View Candidate</button>
+                                <button onclick="navigateToCandidateDetail('${id}')" class="viewButton">View</button>
 
                             </td>
                         </tr>
@@ -532,15 +458,8 @@
                 const { qualification, candidateName, phoneNumber, experience, computerSkills, englishSkills, otherSkills, remark, category } = candidate;
                 const editFormInputs = editForm.elements;
 
-                editFormInputs.qualification.value = qualification;
                 editFormInputs.candidateName.value = candidateName;
                 editFormInputs.phoneNumber.value = phoneNumber;
-                editFormInputs.experience.value = experience;
-                editFormInputs.computerSkills.value = computerSkills;
-                editFormInputs.englishSkills.value = englishSkills;
-                editFormInputs.otherSkills.value = otherSkills;
-                editFormInputs.remark.value = remark;
-                editFormInputs.category.value = category;
 
                 editForm.dataset.id = candidate.id; // Store candidate ID in the form dataset for submission
             }
