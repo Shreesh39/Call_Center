@@ -1,0 +1,18 @@
+# Port number
+REACT_APP_PORT=4004
+
+# URL of the Mongo DB
+# MONGODB_URL=mongodb://127.0.0.1:27017/hrms
+MONGODB_URL=mongodb+srv://shreeshtrivedi33:50vfJLvihnlWbd5S@cluster0.ishk4.mongodb.net/
+
+# JWT secret key
+JWT_SECRET=thisisasa23432r3rfr3tg354t54gt45g46mplesecret
+# Number of minutes after which an access token expires
+JWT_ACCESS_EXPIRATION_MINUTES=30
+# Number of days after which a refresh token expires
+JWT_REFRESH_EXPIRATION_DAYS=30
+# Number of minutes after which a reset password token expires
+JWT_RESET_PASSWORD_EXPIRATION_MINUTES=10
+
+
+BACKEND_URL=http://localhost:4004
