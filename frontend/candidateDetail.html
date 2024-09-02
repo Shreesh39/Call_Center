@@ -220,25 +220,12 @@ function fetchCandidateDetails() {
         candidateDetailsContainer.innerHTML = `
             <div class="details-section">
                 <h3>Personal Information</h3>
-                <p><strong style="font-size: 16px; color: #ff0000;">recruiter Name:</strong> <strong style="font-size: 16px; color: #ff0000;">${data.data.recruiterId.first_name}</strong> <strong style="font-size: 16px; color: #ff0000;">${data.data.recruiterId.last_name}</strong></p>
+                <p><strong style="font-size: 16px; color: #ff0000;">Caller Name:</strong> <strong style="font-size: 16px; color: #ff0000;">${data.data.recruiterId.first_name}</strong> <strong style="font-size: 16px; color: #ff0000;">${data.data.recruiterId.last_name}</strong></p>
                 <p><strong>Client Name:</strong> ${data.data.candidateName}</p>
                 <p><strong>Phone Number:</strong> ${data.data.phoneNumber}</p>
             </div>
             <div class="details-section">
-                <h3>Educational Background</h3>
-                <p><strong>Qualification:</strong> ${data.data.qualification}</p>
-            </div>
-            <div class="details-section">
-                <h3>Skills</h3>
-                <p><strong>Experience:</strong> ${data.data.experience} years</p>
-                <p><strong>Computer Skills:</strong> ${data.data.computerSkills}</p>
-                <p><strong>English Skills:</strong> ${data.data.englishSkills}</p>
-                <p><strong>Other Skills:</strong> ${data.data.otherSkills}</p>
-            </div>
-            <div class="details-section">
                 <h3>Additional Details</h3>
-                <p><strong>Remark:</strong> ${data.data.remark}</p>
-                <p><strong>Category:</strong> ${data.data.category}</p>
                 <p><strong>Next Callback:</strong> ${(data.data.nextCallback !== 'N/A' ? new Date(data.data.nextCallback).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A')}</p>
                 <p><strong>Task assigned at:</strong> ${(data.data.taskAssignedAt !== 'N/A' ? new Date(data.data.taskAssignedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A')}</p>
             </div>
